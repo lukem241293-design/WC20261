@@ -239,15 +239,20 @@ let isSaving=false, lastPushTime=0;
 
 async function pull(){
   if(isSaving)return;
-  if(Date.now()-lastPushTime<8000)return; // don't pull right after a save
+  if(Date.now()-lastPushTime<90000)return; // don't pull for 90s after a save
   try{
     const r=await fetch(RAW_URL+"?t="+Date.now());
     if(!r.ok)return;
     const d=await r.json();
-    if(d.entries)state.entries=d.entries;
-    if(d.bracket)state.bracket=d.bracket;
-    sub("✓ Live · "+new Date().toLocaleTimeString("en-GB",{hour:"2-digit",minute:"2-digit"}));
-    rall();
+    if((d.savedAt||0) > (state.savedAt||0)){
+      if(d.entries)state.entries=d.entries;
+      if(d.bracket)state.bracket=d.bracket;
+      state.savedAt=d.savedAt;
+      sub("✓ Live · "+new Date().toLocaleTimeString("en-GB",{hour:"2-digit",minute:"2-digit"}));
+      rall();
+    } else {
+      sub("✓ Live · "+new Date().toLocaleTimeString("en-GB",{hour:"2-digit",minute:"2-digit"}));
+    }
   }catch(e){sub("⚠ Offline");}
 }
 
@@ -264,7 +269,7 @@ async function push(){
   showSv(true);
   try{
     if(!fileSha)await getSha();
-    const content=btoa(unescape(encodeURIComponent(JSON.stringify(state))));
+    state.savedAt=Date.now(); const content=btoa(unescape(encodeURIComponent(JSON.stringify(state))));
     const body={message:"Update sweepstake",content,sha:fileSha};
     const r=await fetch(GH_API,{method:"PUT",headers:{Authorization:"token "+GH_TOKEN,"Content-Type":"application/json","User-Agent":"sweepstake"},body:JSON.stringify(body)});
     const d=await r.json();
