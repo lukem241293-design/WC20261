@@ -1,0 +1,1821 @@
+<!DOCTYPE html>
+<!-- saved from url=(0048)file:///Users/lukemodeste/Downloads/index_1.html -->
+<html lang="en"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+<title>⚽ WC 2026 Sweepstake</title>
+<style>
+:root{--blue:#003DA5;--red:#C8102E;--gold:#FFD700;--dark:#0D1B4B}
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+body{font-family:-apple-system,BlinkMacSystemFont,'SF Pro Display','Segoe UI',sans-serif;background:#0D1B4B;display:flex;justify-content:center;min-height:100vh}
+#app{width:100%;max-width:430px;min-height:100vh;background:#f0f2f5;display:flex;flex-direction:column;position:relative}
+#header{background:var(--blue);padding:14px 14px 10px;flex-shrink:0;box-shadow:0 2px 12px rgba(0,0,0,.35)}
+#header-inner{display:flex;align-items:center;justify-content:space-between}
+#title{color:var(--gold);font-weight:800;font-size:16px;letter-spacing:.3px}
+#subtitle{color:rgba(255,255,255,.5);font-size:10px;margin-top:3px}
+#edit-btn{background:rgba(255,255,255,.15);border:none;border-radius:10px;padding:7px 13px;color:white;font-size:11px;font-weight:700;cursor:pointer;white-space:nowrap}
+#edit-btn.active{background:var(--red)}
+#content{flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch}
+.tab-pane{display:none}
+.tab-pane.active{display:block}
+#bottom-nav{display:flex;background:white;border-top:1px solid #e0e4ec;flex-shrink:0;box-shadow:0 -2px 12px rgba(0,0,0,.06)}
+.nav-btn{flex:1;padding:9px 4px 10px;border:none;background:transparent;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:2px}
+.nav-btn span.icon{font-size:21px}
+.nav-btn span.lbl{font-size:10px;font-weight:400;color:#999}
+.nav-btn.active span.lbl{font-weight:700;color:var(--blue)}
+.nav-dot{width:0;height:2.5px;background:var(--blue);border-radius:2px;transition:width .2s}
+.nav-btn.active .nav-dot{width:18px}
+.stats-bar{background:var(--dark);padding:10px 14px;display:flex;border-bottom:3px solid var(--gold)}
+.stat{flex:1;text-align:center}
+.stat-val{color:var(--gold);font-weight:700;font-size:14px}
+.stat-lbl{color:#9aaecc;font-size:10px;margin-top:1px}
+.rules-bar{background:#1a2a5e;padding:8px 14px;font-size:11px;color:#aabbdd;line-height:1.6;border-bottom:1px solid #2a3a6e}
+.rules-bar b.g{color:var(--gold)}
+.rules-bar b.s{color:#bbb}
+.search-wrap{padding:8px 12px;background:#f0f2f5;border-bottom:1px solid #e0e0e0}
+.search-wrap input{width:100%;padding:9px 12px;border-radius:10px;border:1.5px solid #dce0e8;font-size:14px;background:white;outline:none;font-family:inherit}
+.entry-row{display:flex;align-items:center;padding:11px 12px;background:white;border-bottom:1px solid #eef0f3;gap:9px;cursor:default}
+.entry-row.ko{background:#f9f9f9;opacity:.55}
+.entry-row.editable{cursor:pointer}
+.entry-num{width:28px;height:28px;border-radius:14px;background:var(--blue);color:white;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;flex-shrink:0}
+.entry-row.ko .entry-num{background:#bbb}
+.entry-info{flex:1;min-width:0}
+.entry-name{font-weight:400;font-size:14px;color:#bbb;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.entry-name.filled{font-weight:600;color:#0a0a1a}
+.entry-name.ko{text-decoration:line-through}
+.entry-team{font-size:11px;color:#8898b0;margin-top:1px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.paid-badge{padding:3px 9px;border-radius:12px;font-size:10px;font-weight:700;flex-shrink:0;border:1px solid #e0e0e0;background:#f5f5f5;color:#aaa}
+.paid-badge.yes{background:#E8F5E9;color:#2E7D32;border-color:#A5D6A7}
+.paid-badge.no{background:#FFEBEE;color:#C62828;border-color:#EF9A9A}
+.out-badge{padding:2px 6px;border-radius:8px;font-size:9px;font-weight:700;background:#fce4ec;color:#c62828;flex-shrink:0}
+.edit-icon{font-size:11px;color:#c0c8d8;flex-shrink:0}
+.section-hdr{padding:9px 14px;font-weight:700;font-size:13px;color:white}
+.odds-row{display:flex;align-items:center;gap:10px;padding:10px 14px;border-bottom:1px solid rgba(0,0,0,.05)}
+.odds-num{width:24px;height:24px;border-radius:12px;flex-shrink:0;color:white;display:flex;align-items:center;justify-content:center;font-size:9px;font-weight:700}
+.odds-name{flex:1;font-size:13px}
+.odds-conf{font-size:9px;color:#999;flex-shrink:0}
+.odds-val{font-weight:700;font-size:13px;padding:2px 8px;border-radius:6px;flex-shrink:0}
+.group-row{display:flex;align-items:center;gap:10px;padding:10px 14px;border-bottom:1px solid #eef0f3}
+.group-team{flex:1;font-size:13px}
+.group-owner{font-size:12px;flex-shrink:0;font-style:italic;color:#ccc}
+.group-owner.owned{color:#003DA5;font-style:normal}
+.match-card{padding:10px 14px;background:white;border-bottom:1px solid #eef0f3}
+.match-card.final{background:#FFFDE7}
+.match-label{font-size:10px;color:#9aaecc;margin-bottom:7px;font-weight:600;letter-spacing:.5px}
+.match-teams{display:flex;gap:6px;align-items:center;margin-bottom:7px}
+.match-team{flex:1;min-width:0}
+.match-team-name{font-size:13px;font-weight:500;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.match-team-owner{font-size:10px;color:var(--blue);margin-top:1px}
+.match-team.right{text-align:right}
+.match-team.right .match-team-owner{text-align:right}
+.vs{font-size:11px;color:#888;font-weight:700;flex-shrink:0}
+.winner-row{background:#f8f9fc;border-radius:8px;padding:7px 10px;display:flex;align-items:center;gap:8px;border:1px solid #e8ecf2}
+.winner-row.won{background:#FFF9C4;border-color:var(--gold)}
+.winner-label{font-size:11px;color:#888;flex-shrink:0}
+.winner-text{flex:1;font-size:13px;color:#bbb}
+.winner-text.won{font-weight:700;color:#7B5000}
+select{width:100%;padding:7px 8px;border-radius:7px;border:1px solid #dce0e8;font-size:12px;background:white;outline:none;font-family:inherit}
+select.winner-sel{padding:5px 7px;border-radius:6px;font-size:12px}
+.share-bar{background:var(--dark);padding:10px 14px;display:flex;gap:8px;align-items:center;border-bottom:3px solid var(--gold)}
+.share-bar span{color:#9aaecc;font-size:11px;flex:1}
+.share-btn{background:var(--gold);border:none;border-radius:8px;padding:7px 14px;font-size:11px;font-weight:700;color:#7B5000;cursor:pointer;white-space:nowrap}
+/* Modals */
+.overlay{position:fixed;inset:0;background:rgba(0,0,0,.65);z-index:100;display:none;flex-direction:column;justify-content:flex-end}
+.overlay.show{display:flex}
+.sheet{background:white;border-radius:20px 20px 0 0;padding:6px 20px 40px;max-height:90vh;overflow-y:auto}
+.sheet-handle{width:36px;height:4px;background:#dce0e8;border-radius:2px;margin:10px auto 16px}
+.sheet-title{font-weight:700;font-size:17px;margin-bottom:18px;color:var(--blue)}
+.field-label{font-size:11px;font-weight:600;color:#666;display:block;margin-bottom:5px;letter-spacing:.5px}
+.field-input{width:100%;padding:12px 14px;border-radius:10px;border:1.5px solid #dce0e8;font-size:16px;box-sizing:border-box;margin-bottom:16px;outline:none;font-family:inherit}
+.field-select{width:100%;padding:12px 14px;border-radius:10px;border:1.5px solid #dce0e8;font-size:14px;background:white;margin-bottom:16px;box-sizing:border-box;outline:none;font-family:inherit}
+.btn-group{display:flex;gap:8px;margin-bottom:16px}
+.toggle-btn{flex:1;padding:11px 8px;border-radius:10px;border:none;cursor:pointer;font-weight:700;font-size:13px;background:#f5f5f5;color:#666;font-family:inherit}
+.toggle-btn.active-yes{background:#2E7D32;color:white}
+.toggle-btn.active-no{background:#C62828;color:white}
+.toggle-btn.active-clear{background:#555;color:white}
+.toggle-btn.active-active{background:#1B5E20;color:white}
+.toggle-btn.active-ko{background:#C62828;color:white}
+.done-btn{width:100%;padding:15px;border-radius:12px;border:none;background:var(--blue);color:white;font-weight:700;font-size:16px;cursor:pointer;font-family:inherit}
+.pin-overlay{position:fixed;inset:0;background:rgba(0,0,0,.75);z-index:200;display:none;align-items:center;justify-content:center;padding:20px}
+.pin-overlay.show{display:flex}
+.pin-box{background:white;border-radius:20px;padding:28px;width:100%;max-width:320px}
+.pin-icon{font-size:36px;margin-bottom:8px;text-align:center}
+.pin-title{font-weight:700;font-size:18px;color:var(--blue);text-align:center}
+.pin-sub{font-size:13px;color:#888;margin-top:4px;text-align:center;margin-bottom:20px}
+.pin-input{width:100%;padding:14px;border-radius:10px;border:2px solid #dce0e8;font-size:20px;text-align:center;letter-spacing:6px;outline:none;box-sizing:border-box;margin-bottom:8px;font-family:inherit}
+.pin-input.err{border-color:var(--red)}
+.pin-err{color:var(--red);font-size:13px;text-align:center;margin-bottom:8px;display:none}
+.pin-err.show{display:block}
+.pin-unlock{width:100%;padding:14px;border-radius:10px;border:none;background:var(--blue);color:white;font-weight:700;font-size:15px;cursor:pointer;font-family:inherit}
+.pin-hint{text-align:center;margin-top:12px;font-size:11px;color:#bbb}
+.tbd{color:#ccc}
+.view-notice{background:#1a2a5e;padding:8px 14px;font-size:11px;color:#aabbdd;text-align:center;border-bottom:1px solid #2a3a6e}
+.view-notice b{color:var(--gold)}
+</style>
+</head>
+<body>
+<div id="app">
+
+  <div id="header">
+    <div id="header-inner">
+      <div>
+        <div id="title">⚽ WORLD CUP 2026 SWEEPSTAKE</div>
+        <div id="subtitle">Ready</div>
+      </div>
+      <button id="edit-btn" onclick="onEditBtn()">✎ EDIT</button>
+    </div>
+  </div>
+
+  <div id="content">
+
+    <div id="tab-draw" class="tab-pane active"><div id="draw-share-bar" class="share-bar"><span>📤 Send current state to WhatsApp group</span><button class="share-btn" onclick="copyShareLink()">Copy Share Link</button></div>
+      <div class="stats-bar">
+        <div class="stat"><div class="stat-val" id="s-spots">0/48</div><div class="stat-lbl">Spots</div></div>
+        <div class="stat"><div class="stat-val" id="s-paid">0</div><div class="stat-lbl">Paid</div></div>
+        <div class="stat"><div class="stat-val" id="s-pot">£0</div><div class="stat-lbl">Pot</div></div>
+        <div class="stat"><div class="stat-val" id="s-drawn">0</div><div class="stat-lbl">Drawn</div></div>
+      </div>
+      <div class="rules-bar">
+        <b class="g">📋 Rules: </b>48 teams · £20/team · random draw June · <b class="g">🥇 £900</b> winner · <b class="s">🥈 £80</b> runner-up
+      </div>
+      <div class="search-wrap"><input id="search" type="text" placeholder="🔍  Search name or team..." oninput="renderDraw()"></div>
+      <div id="entries-list"><div class="entry-row" onclick="">
+      <div class="entry-num" style="">1</div>
+      <div class="entry-info">
+        <div class="entry-name">— empty slot —</div>
+        <div class="entry-team">no team drawn yet</div>
+      </div>
+      <div class="paid-badge ">—</div>
+      
+      
+    </div><div class="entry-row" onclick="">
+      <div class="entry-num" style="">2</div>
+      <div class="entry-info">
+        <div class="entry-name">— empty slot —</div>
+        <div class="entry-team">no team drawn yet</div>
+      </div>
+      <div class="paid-badge ">—</div>
+      
+      
+    </div><div class="entry-row" onclick="">
+      <div class="entry-num" style="">3</div>
+      <div class="entry-info">
+        <div class="entry-name">— empty slot —</div>
+        <div class="entry-team">no team drawn yet</div>
+      </div>
+      <div class="paid-badge ">—</div>
+      
+      
+    </div><div class="entry-row" onclick="">
+      <div class="entry-num" style="">4</div>
+      <div class="entry-info">
+        <div class="entry-name">— empty slot —</div>
+        <div class="entry-team">no team drawn yet</div>
+      </div>
+      <div class="paid-badge ">—</div>
+      
+      
+    </div><div class="entry-row" onclick="">
+      <div class="entry-num" style="">5</div>
+      <div class="entry-info">
+        <div class="entry-name">— empty slot —</div>
+        <div class="entry-team">no team drawn yet</div>
+      </div>
+      <div class="paid-badge ">—</div>
+      
+      
+    </div><div class="entry-row" onclick="">
+      <div class="entry-num" style="">6</div>
+      <div class="entry-info">
+        <div class="entry-name">— empty slot —</div>
+        <div class="entry-team">no team drawn yet</div>
+      </div>
+      <div class="paid-badge ">—</div>
+      
+      
+    </div><div class="entry-row" onclick="">
+      <div class="entry-num" style="">7</div>
+      <div class="entry-info">
+        <div class="entry-name">— empty slot —</div>
+        <div class="entry-team">no team drawn yet</div>
+      </div>
+      <div class="paid-badge ">—</div>
+      
+      
+    </div><div class="entry-row" onclick="">
+      <div class="entry-num" style="">8</div>
+      <div class="entry-info">
+        <div class="entry-name">— empty slot —</div>
+        <div class="entry-team">no team drawn yet</div>
+      </div>
+      <div class="paid-badge ">—</div>
+      
+      
+    </div><div class="entry-row" onclick="">
+      <div class="entry-num" style="">9</div>
+      <div class="entry-info">
+        <div class="entry-name">— empty slot —</div>
+        <div class="entry-team">no team drawn yet</div>
+      </div>
+      <div class="paid-badge ">—</div>
+      
+      
+    </div><div class="entry-row" onclick="">
+      <div class="entry-num" style="">10</div>
+      <div class="entry-info">
+        <div class="entry-name">— empty slot —</div>
+        <div class="entry-team">no team drawn yet</div>
+      </div>
+      <div class="paid-badge ">—</div>
+      
+      
+    </div><div class="entry-row" onclick="">
+      <div class="entry-num" style="">11</div>
+      <div class="entry-info">
+        <div class="entry-name">— empty slot —</div>
+        <div class="entry-team">no team drawn yet</div>
+      </div>
+      <div class="paid-badge ">—</div>
+      
+      
+    </div><div class="entry-row" onclick="">
+      <div class="entry-num" style="">12</div>
+      <div class="entry-info">
+        <div class="entry-name">— empty slot —</div>
+        <div class="entry-team">no team drawn yet</div>
+      </div>
+      <div class="paid-badge ">—</div>
+      
+      
+    </div><div class="entry-row" onclick="">
+      <div class="entry-num" style="">13</div>
+      <div class="entry-info">
+        <div class="entry-name">— empty slot —</div>
+        <div class="entry-team">no team drawn yet</div>
+      </div>
+      <div class="paid-badge ">—</div>
+      
+      
+    </div><div class="entry-row" onclick="">
+      <div class="entry-num" style="">14</div>
+      <div class="entry-info">
+        <div class="entry-name">— empty slot —</div>
+        <div class="entry-team">no team drawn yet</div>
+      </div>
+      <div class="paid-badge ">—</div>
+      
+      
+    </div><div class="entry-row" onclick="">
+      <div class="entry-num" style="">15</div>
+      <div class="entry-info">
+        <div class="entry-name">— empty slot —</div>
+        <div class="entry-team">no team drawn yet</div>
+      </div>
+      <div class="paid-badge ">—</div>
+      
+      
+    </div><div class="entry-row" onclick="">
+      <div class="entry-num" style="">16</div>
+      <div class="entry-info">
+        <div class="entry-name">— empty slot —</div>
+        <div class="entry-team">no team drawn yet</div>
+      </div>
+      <div class="paid-badge ">—</div>
+      
+      
+    </div><div class="entry-row" onclick="">
+      <div class="entry-num" style="">17</div>
+      <div class="entry-info">
+        <div class="entry-name">— empty slot —</div>
+        <div class="entry-team">no team drawn yet</div>
+      </div>
+      <div class="paid-badge ">—</div>
+      
+      
+    </div><div class="entry-row" onclick="">
+      <div class="entry-num" style="">18</div>
+      <div class="entry-info">
+        <div class="entry-name">— empty slot —</div>
+        <div class="entry-team">no team drawn yet</div>
+      </div>
+      <div class="paid-badge ">—</div>
+      
+      
+    </div><div class="entry-row" onclick="">
+      <div class="entry-num" style="">19</div>
+      <div class="entry-info">
+        <div class="entry-name">— empty slot —</div>
+        <div class="entry-team">no team drawn yet</div>
+      </div>
+      <div class="paid-badge ">—</div>
+      
+      
+    </div><div class="entry-row" onclick="">
+      <div class="entry-num" style="">20</div>
+      <div class="entry-info">
+        <div class="entry-name">— empty slot —</div>
+        <div class="entry-team">no team drawn yet</div>
+      </div>
+      <div class="paid-badge ">—</div>
+      
+      
+    </div><div class="entry-row" onclick="">
+      <div class="entry-num" style="">21</div>
+      <div class="entry-info">
+        <div class="entry-name">— empty slot —</div>
+        <div class="entry-team">no team drawn yet</div>
+      </div>
+      <div class="paid-badge ">—</div>
+      
+      
+    </div><div class="entry-row" onclick="">
+      <div class="entry-num" style="">22</div>
+      <div class="entry-info">
+        <div class="entry-name">— empty slot —</div>
+        <div class="entry-team">no team drawn yet</div>
+      </div>
+      <div class="paid-badge ">—</div>
+      
+      
+    </div><div class="entry-row" onclick="">
+      <div class="entry-num" style="">23</div>
+      <div class="entry-info">
+        <div class="entry-name">— empty slot —</div>
+        <div class="entry-team">no team drawn yet</div>
+      </div>
+      <div class="paid-badge ">—</div>
+      
+      
+    </div><div class="entry-row" onclick="">
+      <div class="entry-num" style="">24</div>
+      <div class="entry-info">
+        <div class="entry-name">— empty slot —</div>
+        <div class="entry-team">no team drawn yet</div>
+      </div>
+      <div class="paid-badge ">—</div>
+      
+      
+    </div><div class="entry-row" onclick="">
+      <div class="entry-num" style="">25</div>
+      <div class="entry-info">
+        <div class="entry-name">— empty slot —</div>
+        <div class="entry-team">no team drawn yet</div>
+      </div>
+      <div class="paid-badge ">—</div>
+      
+      
+    </div><div class="entry-row" onclick="">
+      <div class="entry-num" style="">26</div>
+      <div class="entry-info">
+        <div class="entry-name">— empty slot —</div>
+        <div class="entry-team">no team drawn yet</div>
+      </div>
+      <div class="paid-badge ">—</div>
+      
+      
+    </div><div class="entry-row" onclick="">
+      <div class="entry-num" style="">27</div>
+      <div class="entry-info">
+        <div class="entry-name">— empty slot —</div>
+        <div class="entry-team">no team drawn yet</div>
+      </div>
+      <div class="paid-badge ">—</div>
+      
+      
+    </div><div class="entry-row" onclick="">
+      <div class="entry-num" style="">28</div>
+      <div class="entry-info">
+        <div class="entry-name">— empty slot —</div>
+        <div class="entry-team">no team drawn yet</div>
+      </div>
+      <div class="paid-badge ">—</div>
+      
+      
+    </div><div class="entry-row" onclick="">
+      <div class="entry-num" style="">29</div>
+      <div class="entry-info">
+        <div class="entry-name">— empty slot —</div>
+        <div class="entry-team">no team drawn yet</div>
+      </div>
+      <div class="paid-badge ">—</div>
+      
+      
+    </div><div class="entry-row" onclick="">
+      <div class="entry-num" style="">30</div>
+      <div class="entry-info">
+        <div class="entry-name">— empty slot —</div>
+        <div class="entry-team">no team drawn yet</div>
+      </div>
+      <div class="paid-badge ">—</div>
+      
+      
+    </div><div class="entry-row" onclick="">
+      <div class="entry-num" style="">31</div>
+      <div class="entry-info">
+        <div class="entry-name">— empty slot —</div>
+        <div class="entry-team">no team drawn yet</div>
+      </div>
+      <div class="paid-badge ">—</div>
+      
+      
+    </div><div class="entry-row" onclick="">
+      <div class="entry-num" style="">32</div>
+      <div class="entry-info">
+        <div class="entry-name">— empty slot —</div>
+        <div class="entry-team">no team drawn yet</div>
+      </div>
+      <div class="paid-badge ">—</div>
+      
+      
+    </div><div class="entry-row" onclick="">
+      <div class="entry-num" style="">33</div>
+      <div class="entry-info">
+        <div class="entry-name">— empty slot —</div>
+        <div class="entry-team">no team drawn yet</div>
+      </div>
+      <div class="paid-badge ">—</div>
+      
+      
+    </div><div class="entry-row" onclick="">
+      <div class="entry-num" style="">34</div>
+      <div class="entry-info">
+        <div class="entry-name">— empty slot —</div>
+        <div class="entry-team">no team drawn yet</div>
+      </div>
+      <div class="paid-badge ">—</div>
+      
+      
+    </div><div class="entry-row" onclick="">
+      <div class="entry-num" style="">35</div>
+      <div class="entry-info">
+        <div class="entry-name">— empty slot —</div>
+        <div class="entry-team">no team drawn yet</div>
+      </div>
+      <div class="paid-badge ">—</div>
+      
+      
+    </div><div class="entry-row" onclick="">
+      <div class="entry-num" style="">36</div>
+      <div class="entry-info">
+        <div class="entry-name">— empty slot —</div>
+        <div class="entry-team">no team drawn yet</div>
+      </div>
+      <div class="paid-badge ">—</div>
+      
+      
+    </div><div class="entry-row" onclick="">
+      <div class="entry-num" style="">37</div>
+      <div class="entry-info">
+        <div class="entry-name">— empty slot —</div>
+        <div class="entry-team">no team drawn yet</div>
+      </div>
+      <div class="paid-badge ">—</div>
+      
+      
+    </div><div class="entry-row" onclick="">
+      <div class="entry-num" style="">38</div>
+      <div class="entry-info">
+        <div class="entry-name">— empty slot —</div>
+        <div class="entry-team">no team drawn yet</div>
+      </div>
+      <div class="paid-badge ">—</div>
+      
+      
+    </div><div class="entry-row" onclick="">
+      <div class="entry-num" style="">39</div>
+      <div class="entry-info">
+        <div class="entry-name">— empty slot —</div>
+        <div class="entry-team">no team drawn yet</div>
+      </div>
+      <div class="paid-badge ">—</div>
+      
+      
+    </div><div class="entry-row" onclick="">
+      <div class="entry-num" style="">40</div>
+      <div class="entry-info">
+        <div class="entry-name">— empty slot —</div>
+        <div class="entry-team">no team drawn yet</div>
+      </div>
+      <div class="paid-badge ">—</div>
+      
+      
+    </div><div class="entry-row" onclick="">
+      <div class="entry-num" style="">41</div>
+      <div class="entry-info">
+        <div class="entry-name">— empty slot —</div>
+        <div class="entry-team">no team drawn yet</div>
+      </div>
+      <div class="paid-badge ">—</div>
+      
+      
+    </div><div class="entry-row" onclick="">
+      <div class="entry-num" style="">42</div>
+      <div class="entry-info">
+        <div class="entry-name">— empty slot —</div>
+        <div class="entry-team">no team drawn yet</div>
+      </div>
+      <div class="paid-badge ">—</div>
+      
+      
+    </div><div class="entry-row" onclick="">
+      <div class="entry-num" style="">43</div>
+      <div class="entry-info">
+        <div class="entry-name">— empty slot —</div>
+        <div class="entry-team">no team drawn yet</div>
+      </div>
+      <div class="paid-badge ">—</div>
+      
+      
+    </div><div class="entry-row" onclick="">
+      <div class="entry-num" style="">44</div>
+      <div class="entry-info">
+        <div class="entry-name">— empty slot —</div>
+        <div class="entry-team">no team drawn yet</div>
+      </div>
+      <div class="paid-badge ">—</div>
+      
+      
+    </div><div class="entry-row" onclick="">
+      <div class="entry-num" style="">45</div>
+      <div class="entry-info">
+        <div class="entry-name">— empty slot —</div>
+        <div class="entry-team">no team drawn yet</div>
+      </div>
+      <div class="paid-badge ">—</div>
+      
+      
+    </div><div class="entry-row" onclick="">
+      <div class="entry-num" style="">46</div>
+      <div class="entry-info">
+        <div class="entry-name">— empty slot —</div>
+        <div class="entry-team">no team drawn yet</div>
+      </div>
+      <div class="paid-badge ">—</div>
+      
+      
+    </div><div class="entry-row" onclick="">
+      <div class="entry-num" style="">47</div>
+      <div class="entry-info">
+        <div class="entry-name">— empty slot —</div>
+        <div class="entry-team">no team drawn yet</div>
+      </div>
+      <div class="paid-badge ">—</div>
+      
+      
+    </div><div class="entry-row" onclick="">
+      <div class="entry-num" style="">48</div>
+      <div class="entry-info">
+        <div class="entry-name">— empty slot —</div>
+        <div class="entry-team">no team drawn yet</div>
+      </div>
+      <div class="paid-badge ">—</div>
+      
+      
+    </div></div>
+    </div>
+
+    <div id="tab-odds" class="tab-pane">
+      <div id="odds-list"><div style="background:#0D1B4B;padding:10px 14px;border-bottom:3px solid #FFD700"><div style="color:#9aaecc;font-size:11px;text-align:center">BetMGM / Polymarket · May 2026 · UK fractional odds</div></div><div class="section-hdr" style="background:#FFD700;color:#7B5000">🏆 ELITE FAVOURITES</div><div class="odds-row" style="background:#FFD700">
+      <div class="odds-num" style="background:#8B6914">1</div>
+      <div class="odds-name" style="font-weight:700;color:#7B5000">🇫🇷 France</div>
+      <div class="odds-conf">UEFA</div>
+      <div class="odds-val" style="color:#7B5000;background:rgba(0,0,0,.08)">9/2</div>
+    </div><div class="odds-row" style="background:#FFD700">
+      <div class="odds-num" style="background:#8B6914">2</div>
+      <div class="odds-name" style="font-weight:700;color:#7B5000">🇪🇸 Spain</div>
+      <div class="odds-conf">UEFA</div>
+      <div class="odds-val" style="color:#7B5000;background:rgba(0,0,0,.08)">5/1</div>
+    </div><div class="odds-row" style="background:#FFD700">
+      <div class="odds-num" style="background:#8B6914">3</div>
+      <div class="odds-name" style="font-weight:700;color:#7B5000">🏴󠁧󠁢󠁥󠁮󠁧󠁿 England</div>
+      <div class="odds-conf">UEFA</div>
+      <div class="odds-val" style="color:#7B5000;background:rgba(0,0,0,.08)">13/2</div>
+    </div><div class="section-hdr" style="background:#1B5E20;color:white">⭐ STRONG CONTENDERS</div><div class="odds-row" style="background:#FFE57F">
+      <div class="odds-num" style="background:#003DA5">4</div>
+      <div class="odds-name" style="font-weight:700;color:#111">🇧🇷 Brazil</div>
+      <div class="odds-conf">CONMEBOL</div>
+      <div class="odds-val" style="color:#111;background:transparent">8/1</div>
+    </div><div class="odds-row" style="background:#FFE57F">
+      <div class="odds-num" style="background:#003DA5">5</div>
+      <div class="odds-name" style="font-weight:700;color:#111">🇦🇷 Argentina</div>
+      <div class="odds-conf">CONMEBOL</div>
+      <div class="odds-val" style="color:#111;background:transparent">8/1</div>
+    </div><div class="odds-row" style="background:#D4EDDA">
+      <div class="odds-num" style="background:#003DA5">6</div>
+      <div class="odds-name" style="font-weight:700;color:#111">🇵🇹 Portugal</div>
+      <div class="odds-conf">UEFA</div>
+      <div class="odds-val" style="color:#111;background:transparent">10/1</div>
+    </div><div class="odds-row" style="background:#D4EDDA">
+      <div class="odds-num" style="background:#003DA5">7</div>
+      <div class="odds-name" style="font-weight:700;color:#111">🇩🇪 Germany</div>
+      <div class="odds-conf">UEFA</div>
+      <div class="odds-val" style="color:#111;background:transparent">14/1</div>
+    </div><div class="odds-row" style="background:#D4EDDA">
+      <div class="odds-num" style="background:#003DA5">8</div>
+      <div class="odds-name" style="font-weight:700;color:#111">🇳🇱 Netherlands</div>
+      <div class="odds-conf">UEFA</div>
+      <div class="odds-val" style="color:#111;background:transparent">20/1</div>
+    </div><div class="section-hdr" style="background:#003DA5;color:white">🔵 SECOND TIER</div><div class="odds-row" style="background:#EBF3FF">
+      <div class="odds-num" style="background:#003DA5">9</div>
+      <div class="odds-name" style="font-weight:400;color:#111">🇳🇴 Norway</div>
+      <div class="odds-conf">UEFA</div>
+      <div class="odds-val" style="color:#111;background:transparent">25/1</div>
+    </div><div class="odds-row" style="background:#EBF3FF">
+      <div class="odds-num" style="background:#003DA5">10</div>
+      <div class="odds-name" style="font-weight:400;color:#111">🇧🇪 Belgium</div>
+      <div class="odds-conf">UEFA</div>
+      <div class="odds-val" style="color:#111;background:transparent">33/1</div>
+    </div><div class="odds-row" style="background:#EBF3FF">
+      <div class="odds-num" style="background:#003DA5">11</div>
+      <div class="odds-name" style="font-weight:400;color:#111">🇨🇴 Colombia</div>
+      <div class="odds-conf">CONMEBOL</div>
+      <div class="odds-val" style="color:#111;background:transparent">40/1</div>
+    </div><div class="odds-row" style="background:#EBF3FF">
+      <div class="odds-num" style="background:#003DA5">12</div>
+      <div class="odds-name" style="font-weight:400;color:#111">🇲🇦 Morocco</div>
+      <div class="odds-conf">CAF</div>
+      <div class="odds-val" style="color:#111;background:transparent">40/1</div>
+    </div><div class="odds-row" style="background:#EBF3FF">
+      <div class="odds-num" style="background:#003DA5">13</div>
+      <div class="odds-name" style="font-weight:400;color:#111">🇺🇸 USA</div>
+      <div class="odds-conf">CONCACAF</div>
+      <div class="odds-val" style="color:#111;background:transparent">40/1</div>
+    </div><div class="odds-row" style="background:#EBF3FF">
+      <div class="odds-num" style="background:#003DA5">14</div>
+      <div class="odds-name" style="font-weight:400;color:#111">🇯🇵 Japan</div>
+      <div class="odds-conf">AFC</div>
+      <div class="odds-val" style="color:#111;background:transparent">50/1</div>
+    </div><div class="odds-row" style="background:#EBF3FF">
+      <div class="odds-num" style="background:#003DA5">15</div>
+      <div class="odds-name" style="font-weight:400;color:#111">🇺🇾 Uruguay</div>
+      <div class="odds-conf">CONMEBOL</div>
+      <div class="odds-val" style="color:#111;background:transparent">50/1</div>
+    </div><div class="section-hdr" style="background:#7B6200;color:white">🟡 MID-RANGE</div><div class="odds-row" style="background:#F8F8F8">
+      <div class="odds-num" style="background:#003DA5">16</div>
+      <div class="odds-name" style="font-weight:400;color:#111">🇭🇷 Croatia</div>
+      <div class="odds-conf">UEFA</div>
+      <div class="odds-val" style="color:#111;background:transparent">66/1</div>
+    </div><div class="odds-row" style="background:#F8F8F8">
+      <div class="odds-num" style="background:#003DA5">17</div>
+      <div class="odds-name" style="font-weight:400;color:#111">🇲🇽 Mexico</div>
+      <div class="odds-conf">CONCACAF</div>
+      <div class="odds-val" style="color:#111;background:transparent">66/1</div>
+    </div><div class="odds-row" style="background:#F8F8F8">
+      <div class="odds-num" style="background:#003DA5">18</div>
+      <div class="odds-name" style="font-weight:400;color:#111">🇸🇳 Senegal</div>
+      <div class="odds-conf">CAF</div>
+      <div class="odds-val" style="color:#111;background:transparent">66/1</div>
+    </div><div class="odds-row" style="background:#F8F8F8">
+      <div class="odds-num" style="background:#003DA5">19</div>
+      <div class="odds-name" style="font-weight:400;color:#111">🇸🇪 Sweden</div>
+      <div class="odds-conf">UEFA</div>
+      <div class="odds-val" style="color:#111;background:transparent">66/1</div>
+    </div><div class="odds-row" style="background:#F8F8F8">
+      <div class="odds-num" style="background:#003DA5">20</div>
+      <div class="odds-name" style="font-weight:400;color:#111">🇨🇭 Switzerland</div>
+      <div class="odds-conf">UEFA</div>
+      <div class="odds-val" style="color:#111;background:transparent">66/1</div>
+    </div><div class="odds-row" style="background:#F8F8F8">
+      <div class="odds-num" style="background:#003DA5">21</div>
+      <div class="odds-name" style="font-weight:400;color:#111">🇹🇷 Turkey</div>
+      <div class="odds-conf">UEFA</div>
+      <div class="odds-val" style="color:#111;background:transparent">66/1</div>
+    </div><div class="odds-row" style="background:#F8F8F8">
+      <div class="odds-num" style="background:#003DA5">22</div>
+      <div class="odds-name" style="font-weight:400;color:#111">🇪🇨 Ecuador</div>
+      <div class="odds-conf">CONMEBOL</div>
+      <div class="odds-val" style="color:#111;background:transparent">80/1</div>
+    </div><div class="odds-row" style="background:#F8F8F8">
+      <div class="odds-num" style="background:#003DA5">23</div>
+      <div class="odds-name" style="font-weight:400;color:#111">🇦🇹 Austria</div>
+      <div class="odds-conf">UEFA</div>
+      <div class="odds-val" style="color:#111;background:transparent">100/1</div>
+    </div><div class="odds-row" style="background:#F8F8F8">
+      <div class="odds-num" style="background:#003DA5">24</div>
+      <div class="odds-name" style="font-weight:400;color:#111">🇨🇦 Canada</div>
+      <div class="odds-conf">CONCACAF</div>
+      <div class="odds-val" style="color:#111;background:transparent">150/1</div>
+    </div><div class="odds-row" style="background:#F8F8F8">
+      <div class="odds-num" style="background:#003DA5">25</div>
+      <div class="odds-name" style="font-weight:400;color:#111">🇵🇾 Paraguay</div>
+      <div class="odds-conf">CONMEBOL</div>
+      <div class="odds-val" style="color:#111;background:transparent">150/1</div>
+    </div><div class="section-hdr" style="background:#424242;color:white">⚪ LONG SHOTS</div><div class="odds-row" style="background:#fff">
+      <div class="odds-num" style="background:#003DA5">26</div>
+      <div class="odds-name" style="font-weight:400;color:#111">🇨🇮 Ivory Coast</div>
+      <div class="odds-conf">CAF</div>
+      <div class="odds-val" style="color:#111;background:transparent">200/1</div>
+    </div><div class="odds-row" style="background:#fff">
+      <div class="odds-num" style="background:#003DA5">27</div>
+      <div class="odds-name" style="font-weight:400;color:#111">🇰🇷 South Korea</div>
+      <div class="odds-conf">AFC</div>
+      <div class="odds-val" style="color:#111;background:transparent">200/1</div>
+    </div><div class="odds-row" style="background:#fff">
+      <div class="odds-num" style="background:#003DA5">28</div>
+      <div class="odds-name" style="font-weight:400;color:#111">🏴󠁧󠁢󠁳󠁣󠁴󠁿 Scotland</div>
+      <div class="odds-conf">UEFA</div>
+      <div class="odds-val" style="color:#111;background:transparent">200/1</div>
+    </div><div class="odds-row" style="background:#fff">
+      <div class="odds-num" style="background:#003DA5">29</div>
+      <div class="odds-name" style="font-weight:400;color:#111">🇦🇺 Australia</div>
+      <div class="odds-conf">AFC</div>
+      <div class="odds-val" style="color:#111;background:transparent">250/1</div>
+    </div><div class="odds-row" style="background:#fff">
+      <div class="odds-num" style="background:#003DA5">30</div>
+      <div class="odds-name" style="font-weight:400;color:#111">🇩🇿 Algeria</div>
+      <div class="odds-conf">CAF</div>
+      <div class="odds-val" style="color:#111;background:transparent">250/1</div>
+    </div><div class="odds-row" style="background:#fff">
+      <div class="odds-num" style="background:#003DA5">31</div>
+      <div class="odds-name" style="font-weight:400;color:#111">🇨🇿 Czechia</div>
+      <div class="odds-conf">UEFA</div>
+      <div class="odds-val" style="color:#111;background:transparent">250/1</div>
+    </div><div class="odds-row" style="background:#fff">
+      <div class="odds-num" style="background:#003DA5">32</div>
+      <div class="odds-name" style="font-weight:400;color:#111">🇪🇬 Egypt</div>
+      <div class="odds-conf">CAF</div>
+      <div class="odds-val" style="color:#111;background:transparent">250/1</div>
+    </div><div class="odds-row" style="background:#fff">
+      <div class="odds-num" style="background:#003DA5">33</div>
+      <div class="odds-name" style="font-weight:400;color:#111">🇬🇭 Ghana</div>
+      <div class="odds-conf">CAF</div>
+      <div class="odds-val" style="color:#111;background:transparent">300/1</div>
+    </div><div class="odds-row" style="background:#fff">
+      <div class="odds-num" style="background:#003DA5">34</div>
+      <div class="odds-name" style="font-weight:400;color:#111">🇮🇷 Iran</div>
+      <div class="odds-conf">AFC</div>
+      <div class="odds-val" style="color:#111;background:transparent">300/1</div>
+    </div><div class="odds-row" style="background:#fff">
+      <div class="odds-num" style="background:#003DA5">35</div>
+      <div class="odds-name" style="font-weight:400;color:#111">🇧🇦 Bosnia &amp; Herz.</div>
+      <div class="odds-conf">UEFA</div>
+      <div class="odds-val" style="color:#111;background:transparent">500/1</div>
+    </div><div class="odds-row" style="background:#fff">
+      <div class="odds-num" style="background:#003DA5">36</div>
+      <div class="odds-name" style="font-weight:400;color:#111">🇿🇦 South Africa</div>
+      <div class="odds-conf">CAF</div>
+      <div class="odds-val" style="color:#111;background:transparent">500/1</div>
+    </div><div class="odds-row" style="background:#fff">
+      <div class="odds-num" style="background:#003DA5">37</div>
+      <div class="odds-name" style="font-weight:400;color:#111">🇸🇦 Saudi Arabia</div>
+      <div class="odds-conf">AFC</div>
+      <div class="odds-val" style="color:#111;background:transparent">500/1</div>
+    </div><div class="odds-row" style="background:#fff">
+      <div class="odds-num" style="background:#003DA5">38</div>
+      <div class="odds-name" style="font-weight:400;color:#111">🇹🇳 Tunisia</div>
+      <div class="odds-conf">CAF</div>
+      <div class="odds-val" style="color:#111;background:transparent">500/1</div>
+    </div><div class="section-hdr" style="background:#C8102E;color:white">🔴 VERY LONG SHOTS</div><div class="odds-row" style="background:#fff">
+      <div class="odds-num" style="background:#003DA5">39</div>
+      <div class="odds-name" style="font-weight:400;color:#111">🇶🇦 Qatar</div>
+      <div class="odds-conf">AFC</div>
+      <div class="odds-val" style="color:#111;background:transparent">1000/1</div>
+    </div><div class="odds-row" style="background:#fff">
+      <div class="odds-num" style="background:#003DA5">40</div>
+      <div class="odds-name" style="font-weight:400;color:#111">🇵🇦 Panama</div>
+      <div class="odds-conf">CONCACAF</div>
+      <div class="odds-val" style="color:#111;background:transparent">1000/1</div>
+    </div><div class="odds-row" style="background:#fff">
+      <div class="odds-num" style="background:#003DA5">41</div>
+      <div class="odds-name" style="font-weight:400;color:#111">🇨🇩 DR Congo</div>
+      <div class="odds-conf">CAF</div>
+      <div class="odds-val" style="color:#111;background:transparent">1000/1</div>
+    </div><div class="odds-row" style="background:#fff">
+      <div class="odds-num" style="background:#003DA5">42</div>
+      <div class="odds-name" style="font-weight:400;color:#111">🇳🇿 New Zealand</div>
+      <div class="odds-conf">OFC</div>
+      <div class="odds-val" style="color:#111;background:transparent">1000/1</div>
+    </div><div class="odds-row" style="background:#fff">
+      <div class="odds-num" style="background:#003DA5">43</div>
+      <div class="odds-name" style="font-weight:400;color:#111">🇯🇴 Jordan</div>
+      <div class="odds-conf">AFC</div>
+      <div class="odds-val" style="color:#111;background:transparent">2000/1</div>
+    </div><div class="odds-row" style="background:#fff">
+      <div class="odds-num" style="background:#003DA5">44</div>
+      <div class="odds-name" style="font-weight:400;color:#111">🇺🇿 Uzbekistan</div>
+      <div class="odds-conf">AFC</div>
+      <div class="odds-val" style="color:#111;background:transparent">2000/1</div>
+    </div><div class="odds-row" style="background:#fff">
+      <div class="odds-num" style="background:#003DA5">45</div>
+      <div class="odds-name" style="font-weight:400;color:#111">🇨🇻 Cape Verde</div>
+      <div class="odds-conf">CAF</div>
+      <div class="odds-val" style="color:#111;background:transparent">2500/1</div>
+    </div><div class="odds-row" style="background:#fff">
+      <div class="odds-num" style="background:#003DA5">46</div>
+      <div class="odds-name" style="font-weight:400;color:#111">🇭🇹 Haiti</div>
+      <div class="odds-conf">CONCACAF</div>
+      <div class="odds-val" style="color:#111;background:transparent">2500/1</div>
+    </div><div class="odds-row" style="background:#fff">
+      <div class="odds-num" style="background:#003DA5">47</div>
+      <div class="odds-name" style="font-weight:400;color:#111">🇨🇼 Curaçao</div>
+      <div class="odds-conf">CONCACAF</div>
+      <div class="odds-val" style="color:#111;background:transparent">5000/1</div>
+    </div><div class="odds-row" style="background:#fff">
+      <div class="odds-num" style="background:#003DA5">48</div>
+      <div class="odds-name" style="font-weight:400;color:#111">🇮🇶 Iraq</div>
+      <div class="odds-conf">AFC</div>
+      <div class="odds-val" style="color:#111;background:transparent">5000/1</div>
+    </div></div>
+    </div>
+
+    <div id="tab-groups" class="tab-pane">
+      <div style="background:var(--dark);padding:10px 14px;border-bottom:3px solid var(--gold)">
+        <div style="color:#9aaecc;font-size:11px;text-align:center">Official 2026 groups · owner shown from Draw</div>
+      </div>
+      <div id="groups-list"><div style="margin-bottom:6px"><div class="section-hdr" style="background:#B71C1C">▸ GROUP A</div><div class="group-row" style="background:white;opacity:1">
+        <div class="group-team" style="color:#111;text-decoration:none">🇲🇽 Mexico</div>
+        <div class="group-owner">not drawn</div>
+        
+      </div><div class="group-row" style="background:#f8f9fc;opacity:1">
+        <div class="group-team" style="color:#111;text-decoration:none">🇿🇦 South Africa</div>
+        <div class="group-owner">not drawn</div>
+        
+      </div><div class="group-row" style="background:white;opacity:1">
+        <div class="group-team" style="color:#111;text-decoration:none">🇰🇷 South Korea</div>
+        <div class="group-owner">not drawn</div>
+        
+      </div><div class="group-row" style="background:#f8f9fc;opacity:1">
+        <div class="group-team" style="color:#111;text-decoration:none">🇨🇿 Czechia</div>
+        <div class="group-owner">not drawn</div>
+        
+      </div></div><div style="margin-bottom:6px"><div class="section-hdr" style="background:#1A237E">▸ GROUP B</div><div class="group-row" style="background:white;opacity:1">
+        <div class="group-team" style="color:#111;text-decoration:none">🇨🇦 Canada</div>
+        <div class="group-owner">not drawn</div>
+        
+      </div><div class="group-row" style="background:#f8f9fc;opacity:1">
+        <div class="group-team" style="color:#111;text-decoration:none">🇧🇦 Bosnia &amp; Herz.</div>
+        <div class="group-owner">not drawn</div>
+        
+      </div><div class="group-row" style="background:white;opacity:1">
+        <div class="group-team" style="color:#111;text-decoration:none">🇶🇦 Qatar</div>
+        <div class="group-owner">not drawn</div>
+        
+      </div><div class="group-row" style="background:#f8f9fc;opacity:1">
+        <div class="group-team" style="color:#111;text-decoration:none">🇨🇭 Switzerland</div>
+        <div class="group-owner">not drawn</div>
+        
+      </div></div><div style="margin-bottom:6px"><div class="section-hdr" style="background:#1B5E20">▸ GROUP C</div><div class="group-row" style="background:white;opacity:1">
+        <div class="group-team" style="color:#111;text-decoration:none">🇧🇷 Brazil</div>
+        <div class="group-owner">not drawn</div>
+        
+      </div><div class="group-row" style="background:#f8f9fc;opacity:1">
+        <div class="group-team" style="color:#111;text-decoration:none">🇲🇦 Morocco</div>
+        <div class="group-owner">not drawn</div>
+        
+      </div><div class="group-row" style="background:white;opacity:1">
+        <div class="group-team" style="color:#111;text-decoration:none">🇭🇹 Haiti</div>
+        <div class="group-owner">not drawn</div>
+        
+      </div><div class="group-row" style="background:#f8f9fc;opacity:1">
+        <div class="group-team" style="color:#111;text-decoration:none">🏴󠁧󠁢󠁳󠁣󠁴󠁿 Scotland</div>
+        <div class="group-owner">not drawn</div>
+        
+      </div></div><div style="margin-bottom:6px"><div class="section-hdr" style="background:#4A148C">▸ GROUP D</div><div class="group-row" style="background:white;opacity:1">
+        <div class="group-team" style="color:#111;text-decoration:none">🇺🇸 USA</div>
+        <div class="group-owner">not drawn</div>
+        
+      </div><div class="group-row" style="background:#f8f9fc;opacity:1">
+        <div class="group-team" style="color:#111;text-decoration:none">🇵🇾 Paraguay</div>
+        <div class="group-owner">not drawn</div>
+        
+      </div><div class="group-row" style="background:white;opacity:1">
+        <div class="group-team" style="color:#111;text-decoration:none">🇦🇺 Australia</div>
+        <div class="group-owner">not drawn</div>
+        
+      </div><div class="group-row" style="background:#f8f9fc;opacity:1">
+        <div class="group-team" style="color:#111;text-decoration:none">🇹🇷 Turkey</div>
+        <div class="group-owner">not drawn</div>
+        
+      </div></div><div style="margin-bottom:6px"><div class="section-hdr" style="background:#E65100">▸ GROUP E</div><div class="group-row" style="background:white;opacity:1">
+        <div class="group-team" style="color:#111;text-decoration:none">🇩🇪 Germany</div>
+        <div class="group-owner">not drawn</div>
+        
+      </div><div class="group-row" style="background:#f8f9fc;opacity:1">
+        <div class="group-team" style="color:#111;text-decoration:none">🇨🇼 Curaçao</div>
+        <div class="group-owner">not drawn</div>
+        
+      </div><div class="group-row" style="background:white;opacity:1">
+        <div class="group-team" style="color:#111;text-decoration:none">🇨🇮 Ivory Coast</div>
+        <div class="group-owner">not drawn</div>
+        
+      </div><div class="group-row" style="background:#f8f9fc;opacity:1">
+        <div class="group-team" style="color:#111;text-decoration:none">🇪🇨 Ecuador</div>
+        <div class="group-owner">not drawn</div>
+        
+      </div></div><div style="margin-bottom:6px"><div class="section-hdr" style="background:#006064">▸ GROUP F</div><div class="group-row" style="background:white;opacity:1">
+        <div class="group-team" style="color:#111;text-decoration:none">🇳🇱 Netherlands</div>
+        <div class="group-owner">not drawn</div>
+        
+      </div><div class="group-row" style="background:#f8f9fc;opacity:1">
+        <div class="group-team" style="color:#111;text-decoration:none">🇯🇵 Japan</div>
+        <div class="group-owner">not drawn</div>
+        
+      </div><div class="group-row" style="background:white;opacity:1">
+        <div class="group-team" style="color:#111;text-decoration:none">🇸🇪 Sweden</div>
+        <div class="group-owner">not drawn</div>
+        
+      </div><div class="group-row" style="background:#f8f9fc;opacity:1">
+        <div class="group-team" style="color:#111;text-decoration:none">🇹🇳 Tunisia</div>
+        <div class="group-owner">not drawn</div>
+        
+      </div></div><div style="margin-bottom:6px"><div class="section-hdr" style="background:#33691E">▸ GROUP G</div><div class="group-row" style="background:white;opacity:1">
+        <div class="group-team" style="color:#111;text-decoration:none">🇧🇪 Belgium</div>
+        <div class="group-owner">not drawn</div>
+        
+      </div><div class="group-row" style="background:#f8f9fc;opacity:1">
+        <div class="group-team" style="color:#111;text-decoration:none">🇪🇬 Egypt</div>
+        <div class="group-owner">not drawn</div>
+        
+      </div><div class="group-row" style="background:white;opacity:1">
+        <div class="group-team" style="color:#111;text-decoration:none">🇮🇷 Iran</div>
+        <div class="group-owner">not drawn</div>
+        
+      </div><div class="group-row" style="background:#f8f9fc;opacity:1">
+        <div class="group-team" style="color:#111;text-decoration:none">🇳🇿 New Zealand</div>
+        <div class="group-owner">not drawn</div>
+        
+      </div></div><div style="margin-bottom:6px"><div class="section-hdr" style="background:#0D47A1">▸ GROUP H</div><div class="group-row" style="background:white;opacity:1">
+        <div class="group-team" style="color:#111;text-decoration:none">🇪🇸 Spain</div>
+        <div class="group-owner">not drawn</div>
+        
+      </div><div class="group-row" style="background:#f8f9fc;opacity:1">
+        <div class="group-team" style="color:#111;text-decoration:none">🇨🇻 Cape Verde</div>
+        <div class="group-owner">not drawn</div>
+        
+      </div><div class="group-row" style="background:white;opacity:1">
+        <div class="group-team" style="color:#111;text-decoration:none">🇸🇦 Saudi Arabia</div>
+        <div class="group-owner">not drawn</div>
+        
+      </div><div class="group-row" style="background:#f8f9fc;opacity:1">
+        <div class="group-team" style="color:#111;text-decoration:none">🇺🇾 Uruguay</div>
+        <div class="group-owner">not drawn</div>
+        
+      </div></div><div style="margin-bottom:6px"><div class="section-hdr" style="background:#880E4F">▸ GROUP I</div><div class="group-row" style="background:white;opacity:1">
+        <div class="group-team" style="color:#111;text-decoration:none">🇫🇷 France</div>
+        <div class="group-owner">not drawn</div>
+        
+      </div><div class="group-row" style="background:#f8f9fc;opacity:1">
+        <div class="group-team" style="color:#111;text-decoration:none">🇸🇳 Senegal</div>
+        <div class="group-owner">not drawn</div>
+        
+      </div><div class="group-row" style="background:white;opacity:1">
+        <div class="group-team" style="color:#111;text-decoration:none">🇮🇶 Iraq</div>
+        <div class="group-owner">not drawn</div>
+        
+      </div><div class="group-row" style="background:#f8f9fc;opacity:1">
+        <div class="group-team" style="color:#111;text-decoration:none">🇳🇴 Norway</div>
+        <div class="group-owner">not drawn</div>
+        
+      </div></div><div style="margin-bottom:6px"><div class="section-hdr" style="background:#37474F">▸ GROUP J</div><div class="group-row" style="background:white;opacity:1">
+        <div class="group-team" style="color:#111;text-decoration:none">🇦🇷 Argentina</div>
+        <div class="group-owner">not drawn</div>
+        
+      </div><div class="group-row" style="background:#f8f9fc;opacity:1">
+        <div class="group-team" style="color:#111;text-decoration:none">🇩🇿 Algeria</div>
+        <div class="group-owner">not drawn</div>
+        
+      </div><div class="group-row" style="background:white;opacity:1">
+        <div class="group-team" style="color:#111;text-decoration:none">🇦🇹 Austria</div>
+        <div class="group-owner">not drawn</div>
+        
+      </div><div class="group-row" style="background:#f8f9fc;opacity:1">
+        <div class="group-team" style="color:#111;text-decoration:none">🇯🇴 Jordan</div>
+        <div class="group-owner">not drawn</div>
+        
+      </div></div><div style="margin-bottom:6px"><div class="section-hdr" style="background:#4E342E">▸ GROUP K</div><div class="group-row" style="background:white;opacity:1">
+        <div class="group-team" style="color:#111;text-decoration:none">🇵🇹 Portugal</div>
+        <div class="group-owner">not drawn</div>
+        
+      </div><div class="group-row" style="background:#f8f9fc;opacity:1">
+        <div class="group-team" style="color:#111;text-decoration:none">🇨🇴 Colombia</div>
+        <div class="group-owner">not drawn</div>
+        
+      </div><div class="group-row" style="background:white;opacity:1">
+        <div class="group-team" style="color:#111;text-decoration:none">🇨🇩 DR Congo</div>
+        <div class="group-owner">not drawn</div>
+        
+      </div><div class="group-row" style="background:#f8f9fc;opacity:1">
+        <div class="group-team" style="color:#111;text-decoration:none">🇺🇿 Uzbekistan</div>
+        <div class="group-owner">not drawn</div>
+        
+      </div></div><div style="margin-bottom:6px"><div class="section-hdr" style="background:#2E7D32">▸ GROUP L</div><div class="group-row" style="background:white;opacity:1">
+        <div class="group-team" style="color:#111;text-decoration:none">🏴󠁧󠁢󠁥󠁮󠁧󠁿 England</div>
+        <div class="group-owner">not drawn</div>
+        
+      </div><div class="group-row" style="background:#f8f9fc;opacity:1">
+        <div class="group-team" style="color:#111;text-decoration:none">🇭🇷 Croatia</div>
+        <div class="group-owner">not drawn</div>
+        
+      </div><div class="group-row" style="background:white;opacity:1">
+        <div class="group-team" style="color:#111;text-decoration:none">🇬🇭 Ghana</div>
+        <div class="group-owner">not drawn</div>
+        
+      </div><div class="group-row" style="background:#f8f9fc;opacity:1">
+        <div class="group-team" style="color:#111;text-decoration:none">🇵🇦 Panama</div>
+        <div class="group-owner">not drawn</div>
+        
+      </div></div></div>
+    </div>
+
+    <div id="tab-bracket" class="tab-pane">
+      <div style="background:var(--dark);padding:10px 14px;border-bottom:3px solid var(--gold)">
+        <div style="color:#9aaecc;font-size:11px;text-align:center" id="bracket-hint">Tap EDIT to fill in results · owners shown auto</div>
+      </div>
+      <div id="bracket-list"><div style="margin-bottom:4px"><div class="section-hdr" style="background:#AD1457;color:white">Round of 32</div><div class="match-card " id="mc-R32_1">
+        <div class="match-label">MATCH 1</div>
+        <div class="match-teams"><div class="match-team">
+          <div class="match-team-name"><span class="tbd">TBD</span></div>
+          
+        </div>
+        <div class="vs">vs</div>
+        <div class="match-team right">
+          <div class="match-team-name"><span class="tbd">TBD</span></div>
+          
+        </div></div></div><div class="match-card " id="mc-R32_2">
+        <div class="match-label">MATCH 2</div>
+        <div class="match-teams"><div class="match-team">
+          <div class="match-team-name"><span class="tbd">TBD</span></div>
+          
+        </div>
+        <div class="vs">vs</div>
+        <div class="match-team right">
+          <div class="match-team-name"><span class="tbd">TBD</span></div>
+          
+        </div></div></div><div class="match-card " id="mc-R32_3">
+        <div class="match-label">MATCH 3</div>
+        <div class="match-teams"><div class="match-team">
+          <div class="match-team-name"><span class="tbd">TBD</span></div>
+          
+        </div>
+        <div class="vs">vs</div>
+        <div class="match-team right">
+          <div class="match-team-name"><span class="tbd">TBD</span></div>
+          
+        </div></div></div><div class="match-card " id="mc-R32_4">
+        <div class="match-label">MATCH 4</div>
+        <div class="match-teams"><div class="match-team">
+          <div class="match-team-name"><span class="tbd">TBD</span></div>
+          
+        </div>
+        <div class="vs">vs</div>
+        <div class="match-team right">
+          <div class="match-team-name"><span class="tbd">TBD</span></div>
+          
+        </div></div></div><div class="match-card " id="mc-R32_5">
+        <div class="match-label">MATCH 5</div>
+        <div class="match-teams"><div class="match-team">
+          <div class="match-team-name"><span class="tbd">TBD</span></div>
+          
+        </div>
+        <div class="vs">vs</div>
+        <div class="match-team right">
+          <div class="match-team-name"><span class="tbd">TBD</span></div>
+          
+        </div></div></div><div class="match-card " id="mc-R32_6">
+        <div class="match-label">MATCH 6</div>
+        <div class="match-teams"><div class="match-team">
+          <div class="match-team-name"><span class="tbd">TBD</span></div>
+          
+        </div>
+        <div class="vs">vs</div>
+        <div class="match-team right">
+          <div class="match-team-name"><span class="tbd">TBD</span></div>
+          
+        </div></div></div><div class="match-card " id="mc-R32_7">
+        <div class="match-label">MATCH 7</div>
+        <div class="match-teams"><div class="match-team">
+          <div class="match-team-name"><span class="tbd">TBD</span></div>
+          
+        </div>
+        <div class="vs">vs</div>
+        <div class="match-team right">
+          <div class="match-team-name"><span class="tbd">TBD</span></div>
+          
+        </div></div></div><div class="match-card " id="mc-R32_8">
+        <div class="match-label">MATCH 8</div>
+        <div class="match-teams"><div class="match-team">
+          <div class="match-team-name"><span class="tbd">TBD</span></div>
+          
+        </div>
+        <div class="vs">vs</div>
+        <div class="match-team right">
+          <div class="match-team-name"><span class="tbd">TBD</span></div>
+          
+        </div></div></div><div class="match-card " id="mc-R32_9">
+        <div class="match-label">MATCH 9</div>
+        <div class="match-teams"><div class="match-team">
+          <div class="match-team-name"><span class="tbd">TBD</span></div>
+          
+        </div>
+        <div class="vs">vs</div>
+        <div class="match-team right">
+          <div class="match-team-name"><span class="tbd">TBD</span></div>
+          
+        </div></div></div><div class="match-card " id="mc-R32_10">
+        <div class="match-label">MATCH 10</div>
+        <div class="match-teams"><div class="match-team">
+          <div class="match-team-name"><span class="tbd">TBD</span></div>
+          
+        </div>
+        <div class="vs">vs</div>
+        <div class="match-team right">
+          <div class="match-team-name"><span class="tbd">TBD</span></div>
+          
+        </div></div></div><div class="match-card " id="mc-R32_11">
+        <div class="match-label">MATCH 11</div>
+        <div class="match-teams"><div class="match-team">
+          <div class="match-team-name"><span class="tbd">TBD</span></div>
+          
+        </div>
+        <div class="vs">vs</div>
+        <div class="match-team right">
+          <div class="match-team-name"><span class="tbd">TBD</span></div>
+          
+        </div></div></div><div class="match-card " id="mc-R32_12">
+        <div class="match-label">MATCH 12</div>
+        <div class="match-teams"><div class="match-team">
+          <div class="match-team-name"><span class="tbd">TBD</span></div>
+          
+        </div>
+        <div class="vs">vs</div>
+        <div class="match-team right">
+          <div class="match-team-name"><span class="tbd">TBD</span></div>
+          
+        </div></div></div><div class="match-card " id="mc-R32_13">
+        <div class="match-label">MATCH 13</div>
+        <div class="match-teams"><div class="match-team">
+          <div class="match-team-name"><span class="tbd">TBD</span></div>
+          
+        </div>
+        <div class="vs">vs</div>
+        <div class="match-team right">
+          <div class="match-team-name"><span class="tbd">TBD</span></div>
+          
+        </div></div></div><div class="match-card " id="mc-R32_14">
+        <div class="match-label">MATCH 14</div>
+        <div class="match-teams"><div class="match-team">
+          <div class="match-team-name"><span class="tbd">TBD</span></div>
+          
+        </div>
+        <div class="vs">vs</div>
+        <div class="match-team right">
+          <div class="match-team-name"><span class="tbd">TBD</span></div>
+          
+        </div></div></div><div class="match-card " id="mc-R32_15">
+        <div class="match-label">MATCH 15</div>
+        <div class="match-teams"><div class="match-team">
+          <div class="match-team-name"><span class="tbd">TBD</span></div>
+          
+        </div>
+        <div class="vs">vs</div>
+        <div class="match-team right">
+          <div class="match-team-name"><span class="tbd">TBD</span></div>
+          
+        </div></div></div><div class="match-card " id="mc-R32_16">
+        <div class="match-label">MATCH 16</div>
+        <div class="match-teams"><div class="match-team">
+          <div class="match-team-name"><span class="tbd">TBD</span></div>
+          
+        </div>
+        <div class="vs">vs</div>
+        <div class="match-team right">
+          <div class="match-team-name"><span class="tbd">TBD</span></div>
+          
+        </div></div></div></div><div style="margin-bottom:4px"><div class="section-hdr" style="background:#003DA5;color:white">Round of 16</div><div class="match-card " id="mc-R16_1">
+        <div class="match-label">MATCH 1</div>
+        <div class="match-teams"><div class="match-team">
+          <div class="match-team-name"><span class="tbd">TBD</span></div>
+          
+        </div>
+        <div class="vs">vs</div>
+        <div class="match-team right">
+          <div class="match-team-name"><span class="tbd">TBD</span></div>
+          
+        </div></div></div><div class="match-card " id="mc-R16_2">
+        <div class="match-label">MATCH 2</div>
+        <div class="match-teams"><div class="match-team">
+          <div class="match-team-name"><span class="tbd">TBD</span></div>
+          
+        </div>
+        <div class="vs">vs</div>
+        <div class="match-team right">
+          <div class="match-team-name"><span class="tbd">TBD</span></div>
+          
+        </div></div></div><div class="match-card " id="mc-R16_3">
+        <div class="match-label">MATCH 3</div>
+        <div class="match-teams"><div class="match-team">
+          <div class="match-team-name"><span class="tbd">TBD</span></div>
+          
+        </div>
+        <div class="vs">vs</div>
+        <div class="match-team right">
+          <div class="match-team-name"><span class="tbd">TBD</span></div>
+          
+        </div></div></div><div class="match-card " id="mc-R16_4">
+        <div class="match-label">MATCH 4</div>
+        <div class="match-teams"><div class="match-team">
+          <div class="match-team-name"><span class="tbd">TBD</span></div>
+          
+        </div>
+        <div class="vs">vs</div>
+        <div class="match-team right">
+          <div class="match-team-name"><span class="tbd">TBD</span></div>
+          
+        </div></div></div><div class="match-card " id="mc-R16_5">
+        <div class="match-label">MATCH 5</div>
+        <div class="match-teams"><div class="match-team">
+          <div class="match-team-name"><span class="tbd">TBD</span></div>
+          
+        </div>
+        <div class="vs">vs</div>
+        <div class="match-team right">
+          <div class="match-team-name"><span class="tbd">TBD</span></div>
+          
+        </div></div></div><div class="match-card " id="mc-R16_6">
+        <div class="match-label">MATCH 6</div>
+        <div class="match-teams"><div class="match-team">
+          <div class="match-team-name"><span class="tbd">TBD</span></div>
+          
+        </div>
+        <div class="vs">vs</div>
+        <div class="match-team right">
+          <div class="match-team-name"><span class="tbd">TBD</span></div>
+          
+        </div></div></div><div class="match-card " id="mc-R16_7">
+        <div class="match-label">MATCH 7</div>
+        <div class="match-teams"><div class="match-team">
+          <div class="match-team-name"><span class="tbd">TBD</span></div>
+          
+        </div>
+        <div class="vs">vs</div>
+        <div class="match-team right">
+          <div class="match-team-name"><span class="tbd">TBD</span></div>
+          
+        </div></div></div><div class="match-card " id="mc-R16_8">
+        <div class="match-label">MATCH 8</div>
+        <div class="match-teams"><div class="match-team">
+          <div class="match-team-name"><span class="tbd">TBD</span></div>
+          
+        </div>
+        <div class="vs">vs</div>
+        <div class="match-team right">
+          <div class="match-team-name"><span class="tbd">TBD</span></div>
+          
+        </div></div></div></div><div style="margin-bottom:4px"><div class="section-hdr" style="background:#1B5E20;color:white">Quarter-Finals</div><div class="match-card " id="mc-QF_1">
+        <div class="match-label">MATCH 1</div>
+        <div class="match-teams"><div class="match-team">
+          <div class="match-team-name"><span class="tbd">TBD</span></div>
+          
+        </div>
+        <div class="vs">vs</div>
+        <div class="match-team right">
+          <div class="match-team-name"><span class="tbd">TBD</span></div>
+          
+        </div></div></div><div class="match-card " id="mc-QF_2">
+        <div class="match-label">MATCH 2</div>
+        <div class="match-teams"><div class="match-team">
+          <div class="match-team-name"><span class="tbd">TBD</span></div>
+          
+        </div>
+        <div class="vs">vs</div>
+        <div class="match-team right">
+          <div class="match-team-name"><span class="tbd">TBD</span></div>
+          
+        </div></div></div><div class="match-card " id="mc-QF_3">
+        <div class="match-label">MATCH 3</div>
+        <div class="match-teams"><div class="match-team">
+          <div class="match-team-name"><span class="tbd">TBD</span></div>
+          
+        </div>
+        <div class="vs">vs</div>
+        <div class="match-team right">
+          <div class="match-team-name"><span class="tbd">TBD</span></div>
+          
+        </div></div></div><div class="match-card " id="mc-QF_4">
+        <div class="match-label">MATCH 4</div>
+        <div class="match-teams"><div class="match-team">
+          <div class="match-team-name"><span class="tbd">TBD</span></div>
+          
+        </div>
+        <div class="vs">vs</div>
+        <div class="match-team right">
+          <div class="match-team-name"><span class="tbd">TBD</span></div>
+          
+        </div></div></div></div><div style="margin-bottom:4px"><div class="section-hdr" style="background:#4A148C;color:white">Semi-Finals</div><div class="match-card " id="mc-SF_1">
+        <div class="match-label">MATCH 1</div>
+        <div class="match-teams"><div class="match-team">
+          <div class="match-team-name"><span class="tbd">TBD</span></div>
+          
+        </div>
+        <div class="vs">vs</div>
+        <div class="match-team right">
+          <div class="match-team-name"><span class="tbd">TBD</span></div>
+          
+        </div></div></div><div class="match-card " id="mc-SF_2">
+        <div class="match-label">MATCH 2</div>
+        <div class="match-teams"><div class="match-team">
+          <div class="match-team-name"><span class="tbd">TBD</span></div>
+          
+        </div>
+        <div class="vs">vs</div>
+        <div class="match-team right">
+          <div class="match-team-name"><span class="tbd">TBD</span></div>
+          
+        </div></div></div></div><div style="margin-bottom:4px"><div class="section-hdr" style="background:#546E7A;color:white">3rd Place</div><div class="match-card " id="mc-3P_1">
+        <div class="match-label">3RD PLACE</div>
+        <div class="match-teams"><div class="match-team">
+          <div class="match-team-name"><span class="tbd">TBD</span></div>
+          
+        </div>
+        <div class="vs">vs</div>
+        <div class="match-team right">
+          <div class="match-team-name"><span class="tbd">TBD</span></div>
+          
+        </div></div></div></div><div style="margin-bottom:4px"><div class="section-hdr" style="background:#FFD700;color:#000">⭐ THE FINAL</div><div class="match-card final" id="mc-FIN_1">
+        <div class="match-label">FINAL</div>
+        <div class="match-teams"><div class="match-team">
+          <div class="match-team-name"><span class="tbd">TBD</span></div>
+          
+        </div>
+        <div class="vs">vs</div>
+        <div class="match-team right">
+          <div class="match-team-name"><span class="tbd">TBD</span></div>
+          
+        </div></div></div></div></div>
+    </div>
+
+  </div>
+
+  <div id="bottom-nav">
+    <button class="nav-btn active" onclick="switchTab(&#39;draw&#39;,this)"><span class="icon">⚽</span><span class="lbl">Draw</span><div class="nav-dot"></div></button>
+    <button class="nav-btn" onclick="switchTab(&#39;odds&#39;,this)"><span class="icon">📊</span><span class="lbl">Odds</span><div class="nav-dot"></div></button>
+    <button class="nav-btn" onclick="switchTab(&#39;groups&#39;,this)"><span class="icon">🌍</span><span class="lbl">Groups</span><div class="nav-dot"></div></button>
+    <button class="nav-btn" onclick="switchTab(&#39;bracket&#39;,this)"><span class="icon">🏆</span><span class="lbl">Bracket</span><div class="nav-dot"></div></button>
+  </div>
+
+</div>
+
+<!-- Edit modal -->
+<div id="edit-overlay" class="overlay" onclick="closeEdit()">
+  <div class="sheet" onclick="event.stopPropagation()">
+    <div class="sheet-handle"></div>
+    <div class="sheet-title" id="edit-title">Edit Entry</div>
+    <label class="field-label">NAME</label>
+    <input class="field-input" id="edit-name" type="text" placeholder="Enter participant name...">
+    <label class="field-label">PAID</label>
+    <div class="btn-group">
+      <button class="toggle-btn" id="btn-yes" onclick="setPaid(&#39;YES&#39;)">✓ Paid</button>
+      <button class="toggle-btn" id="btn-no" onclick="setPaid(&#39;NO&#39;)">✗ Unpaid</button>
+      <button class="toggle-btn" id="btn-clear" onclick="setPaid(&#39;&#39;)">Clear</button>
+    </div>
+    <label class="field-label">TEAM DRAWN</label>
+    <select class="field-select" id="edit-team"><option value="">— No team yet —</option><option value="🇫🇷 France">🇫🇷 France (9/2)</option><option value="🇪🇸 Spain">🇪🇸 Spain (5/1)</option><option value="🏴󠁧󠁢󠁥󠁮󠁧󠁿 England">🏴󠁧󠁢󠁥󠁮󠁧󠁿 England (13/2)</option><option value="🇧🇷 Brazil">🇧🇷 Brazil (8/1)</option><option value="🇦🇷 Argentina">🇦🇷 Argentina (8/1)</option><option value="🇵🇹 Portugal">🇵🇹 Portugal (10/1)</option><option value="🇩🇪 Germany">🇩🇪 Germany (14/1)</option><option value="🇳🇱 Netherlands">🇳🇱 Netherlands (20/1)</option><option value="🇳🇴 Norway">🇳🇴 Norway (25/1)</option><option value="🇧🇪 Belgium">🇧🇪 Belgium (33/1)</option><option value="🇨🇴 Colombia">🇨🇴 Colombia (40/1)</option><option value="🇲🇦 Morocco">🇲🇦 Morocco (40/1)</option><option value="🇺🇸 USA">🇺🇸 USA (40/1)</option><option value="🇯🇵 Japan">🇯🇵 Japan (50/1)</option><option value="🇺🇾 Uruguay">🇺🇾 Uruguay (50/1)</option><option value="🇭🇷 Croatia">🇭🇷 Croatia (66/1)</option><option value="🇲🇽 Mexico">🇲🇽 Mexico (66/1)</option><option value="🇸🇳 Senegal">🇸🇳 Senegal (66/1)</option><option value="🇸🇪 Sweden">🇸🇪 Sweden (66/1)</option><option value="🇨🇭 Switzerland">🇨🇭 Switzerland (66/1)</option><option value="🇹🇷 Turkey">🇹🇷 Turkey (66/1)</option><option value="🇪🇨 Ecuador">🇪🇨 Ecuador (80/1)</option><option value="🇦🇹 Austria">🇦🇹 Austria (100/1)</option><option value="🇨🇦 Canada">🇨🇦 Canada (150/1)</option><option value="🇵🇾 Paraguay">🇵🇾 Paraguay (150/1)</option><option value="🇨🇮 Ivory Coast">🇨🇮 Ivory Coast (200/1)</option><option value="🇰🇷 South Korea">🇰🇷 South Korea (200/1)</option><option value="🏴󠁧󠁢󠁳󠁣󠁴󠁿 Scotland">🏴󠁧󠁢󠁳󠁣󠁴󠁿 Scotland (200/1)</option><option value="🇦🇺 Australia">🇦🇺 Australia (250/1)</option><option value="🇩🇿 Algeria">🇩🇿 Algeria (250/1)</option><option value="🇨🇿 Czechia">🇨🇿 Czechia (250/1)</option><option value="🇪🇬 Egypt">🇪🇬 Egypt (250/1)</option><option value="🇬🇭 Ghana">🇬🇭 Ghana (300/1)</option><option value="🇮🇷 Iran">🇮🇷 Iran (300/1)</option><option value="🇧🇦 Bosnia &amp; Herz.">🇧🇦 Bosnia &amp; Herz. (500/1)</option><option value="🇿🇦 South Africa">🇿🇦 South Africa (500/1)</option><option value="🇸🇦 Saudi Arabia">🇸🇦 Saudi Arabia (500/1)</option><option value="🇹🇳 Tunisia">🇹🇳 Tunisia (500/1)</option><option value="🇶🇦 Qatar">🇶🇦 Qatar (1000/1)</option><option value="🇵🇦 Panama">🇵🇦 Panama (1000/1)</option><option value="🇨🇩 DR Congo">🇨🇩 DR Congo (1000/1)</option><option value="🇳🇿 New Zealand">🇳🇿 New Zealand (1000/1)</option><option value="🇯🇴 Jordan">🇯🇴 Jordan (2000/1)</option><option value="🇺🇿 Uzbekistan">🇺🇿 Uzbekistan (2000/1)</option><option value="🇨🇻 Cape Verde">🇨🇻 Cape Verde (2500/1)</option><option value="🇭🇹 Haiti">🇭🇹 Haiti (2500/1)</option><option value="🇨🇼 Curaçao">🇨🇼 Curaçao (5000/1)</option><option value="🇮🇶 Iraq">🇮🇶 Iraq (5000/1)</option></select>
+    <label class="field-label">STATUS</label>
+    <div class="btn-group">
+      <button class="toggle-btn" id="btn-active" onclick="setStatus(&#39;ACTIVE&#39;)">🟢 Active</button>
+      <button class="toggle-btn" id="btn-ko" onclick="setStatus(&#39;KNOCKED OUT&#39;)">💀 Knocked Out</button>
+    </div>
+    <button class="done-btn" onclick="saveEdit()">Done ✓</button>
+  </div>
+</div>
+
+<!-- Pin modal -->
+<div id="pin-overlay" class="pin-overlay" onclick="closePinOverlay(event)">
+  <div class="pin-box">
+    <div class="pin-icon">🔐</div>
+    <div class="pin-title">Organiser Mode</div>
+    <div class="pin-sub">Enter your PIN to edit</div>
+    <input class="pin-input" id="pin-input" type="password" placeholder="• • • •" maxlength="10" onkeydown="if(event.key===&#39;Enter&#39;)checkPin()">
+    <div class="pin-err" id="pin-err">✗ Incorrect PIN</div>
+    <button class="pin-unlock" onclick="checkPin()">Unlock</button>
+    <div class="pin-hint">Default PIN: 2026</div>
+  </div>
+</div>
+
+<script>
+// ── DATA ─────────────────────────────────────────────────────────
+
+const TEAMS=[
+  {r:1,t:"🇫🇷 France",o:"9/2",c:"UEFA"},
+  {r:2,t:"🇪🇸 Spain",o:"5/1",c:"UEFA"},
+  {r:3,t:"🏴󠁧󠁢󠁥󠁮󠁧󠁿 England",o:"13/2",c:"UEFA"},
+  {r:4,t:"🇧🇷 Brazil",o:"8/1",c:"CONMEBOL"},
+  {r:5,t:"🇦🇷 Argentina",o:"8/1",c:"CONMEBOL"},
+  {r:6,t:"🇵🇹 Portugal",o:"10/1",c:"UEFA"},
+  {r:7,t:"🇩🇪 Germany",o:"14/1",c:"UEFA"},
+  {r:8,t:"🇳🇱 Netherlands",o:"20/1",c:"UEFA"},
+  {r:9,t:"🇳🇴 Norway",o:"25/1",c:"UEFA"},
+  {r:10,t:"🇧🇪 Belgium",o:"33/1",c:"UEFA"},
+  {r:11,t:"🇨🇴 Colombia",o:"40/1",c:"CONMEBOL"},
+  {r:12,t:"🇲🇦 Morocco",o:"40/1",c:"CAF"},
+  {r:13,t:"🇺🇸 USA",o:"40/1",c:"CONCACAF"},
+  {r:14,t:"🇯🇵 Japan",o:"50/1",c:"AFC"},
+  {r:15,t:"🇺🇾 Uruguay",o:"50/1",c:"CONMEBOL"},
+  {r:16,t:"🇭🇷 Croatia",o:"66/1",c:"UEFA"},
+  {r:17,t:"🇲🇽 Mexico",o:"66/1",c:"CONCACAF"},
+  {r:18,t:"🇸🇳 Senegal",o:"66/1",c:"CAF"},
+  {r:19,t:"🇸🇪 Sweden",o:"66/1",c:"UEFA"},
+  {r:20,t:"🇨🇭 Switzerland",o:"66/1",c:"UEFA"},
+  {r:21,t:"🇹🇷 Turkey",o:"66/1",c:"UEFA"},
+  {r:22,t:"🇪🇨 Ecuador",o:"80/1",c:"CONMEBOL"},
+  {r:23,t:"🇦🇹 Austria",o:"100/1",c:"UEFA"},
+  {r:24,t:"🇨🇦 Canada",o:"150/1",c:"CONCACAF"},
+  {r:25,t:"🇵🇾 Paraguay",o:"150/1",c:"CONMEBOL"},
+  {r:26,t:"🇨🇮 Ivory Coast",o:"200/1",c:"CAF"},
+  {r:27,t:"🇰🇷 South Korea",o:"200/1",c:"AFC"},
+  {r:28,t:"🏴󠁧󠁢󠁳󠁣󠁴󠁿 Scotland",o:"200/1",c:"UEFA"},
+  {r:29,t:"🇦🇺 Australia",o:"250/1",c:"AFC"},
+  {r:30,t:"🇩🇿 Algeria",o:"250/1",c:"CAF"},
+  {r:31,t:"🇨🇿 Czechia",o:"250/1",c:"UEFA"},
+  {r:32,t:"🇪🇬 Egypt",o:"250/1",c:"CAF"},
+  {r:33,t:"🇬🇭 Ghana",o:"300/1",c:"CAF"},
+  {r:34,t:"🇮🇷 Iran",o:"300/1",c:"AFC"},
+  {r:35,t:"🇧🇦 Bosnia & Herz.",o:"500/1",c:"UEFA"},
+  {r:36,t:"🇿🇦 South Africa",o:"500/1",c:"CAF"},
+  {r:37,t:"🇸🇦 Saudi Arabia",o:"500/1",c:"AFC"},
+  {r:38,t:"🇹🇳 Tunisia",o:"500/1",c:"CAF"},
+  {r:39,t:"🇶🇦 Qatar",o:"1000/1",c:"AFC"},
+  {r:40,t:"🇵🇦 Panama",o:"1000/1",c:"CONCACAF"},
+  {r:41,t:"🇨🇩 DR Congo",o:"1000/1",c:"CAF"},
+  {r:42,t:"🇳🇿 New Zealand",o:"1000/1",c:"OFC"},
+  {r:43,t:"🇯🇴 Jordan",o:"2000/1",c:"AFC"},
+  {r:44,t:"🇺🇿 Uzbekistan",o:"2000/1",c:"AFC"},
+  {r:45,t:"🇨🇻 Cape Verde",o:"2500/1",c:"CAF"},
+  {r:46,t:"🇭🇹 Haiti",o:"2500/1",c:"CONCACAF"},
+  {r:47,t:"🇨🇼 Curaçao",o:"5000/1",c:"CONCACAF"},
+  {r:48,t:"🇮🇶 Iraq",o:"5000/1",c:"AFC"},
+];
+
+const GROUPS={
+  A:["🇲🇽 Mexico","🇿🇦 South Africa","🇰🇷 South Korea","🇨🇿 Czechia"],
+  B:["🇨🇦 Canada","🇧🇦 Bosnia & Herz.","🇶🇦 Qatar","🇨🇭 Switzerland"],
+  C:["🇧🇷 Brazil","🇲🇦 Morocco","🇭🇹 Haiti","🏴󠁧󠁢󠁳󠁣󠁴󠁿 Scotland"],
+  D:["🇺🇸 USA","🇵🇾 Paraguay","🇦🇺 Australia","🇹🇷 Turkey"],
+  E:["🇩🇪 Germany","🇨🇼 Curaçao","🇨🇮 Ivory Coast","🇪🇨 Ecuador"],
+  F:["🇳🇱 Netherlands","🇯🇵 Japan","🇸🇪 Sweden","🇹🇳 Tunisia"],
+  G:["🇧🇪 Belgium","🇪🇬 Egypt","🇮🇷 Iran","🇳🇿 New Zealand"],
+  H:["🇪🇸 Spain","🇨🇻 Cape Verde","🇸🇦 Saudi Arabia","🇺🇾 Uruguay"],
+  I:["🇫🇷 France","🇸🇳 Senegal","🇮🇶 Iraq","🇳🇴 Norway"],
+  J:["🇦🇷 Argentina","🇩🇿 Algeria","🇦🇹 Austria","🇯🇴 Jordan"],
+  K:["🇵🇹 Portugal","🇨🇴 Colombia","🇨🇩 DR Congo","🇺🇿 Uzbekistan"],
+  L:["🏴󠁧󠁢󠁥󠁮󠁧󠁿 England","🇭🇷 Croatia","🇬🇭 Ghana","🇵🇦 Panama"],
+};
+
+const GC=["#B71C1C","#1A237E","#1B5E20","#4A148C","#E65100","#006064","#33691E","#0D47A1","#880E4F","#37474F","#4E342E","#2E7D32"];
+
+const ROUNDS=[
+  {id:"R32",label:"Round of 32",n:16,color:"#AD1457"},
+  {id:"R16",label:"Round of 16",n:8,color:"#003DA5"},
+  {id:"QF",label:"Quarter-Finals",n:4,color:"#1B5E20"},
+  {id:"SF",label:"Semi-Finals",n:2,color:"#4A148C"},
+  {id:"3P",label:"3rd Place",n:1,color:"#546E7A"},
+  {id:"FIN",label:"⭐ THE FINAL",n:1,color:"#FFD700"},
+];
+
+const TIER_BREAKS={1:"🏆 ELITE FAVOURITES",4:"⭐ STRONG CONTENDERS",9:"🔵 SECOND TIER",16:"🟡 MID-RANGE",26:"⚪ LONG SHOTS",39:"🔴 VERY LONG SHOTS"};
+const TIER_BG={1:"#FFD700",4:"#1B5E20",9:"#003DA5",16:"#7B6200",26:"#424242",39:"#C8102E"};
+const PIN="2026";
+const SK="wc2026_local";
+
+// ── STATE ─────────────────────────────────────────────────────────
+
+let isAdmin=false;
+let isViewMode=false;
+let editingId=null;
+let editingMatchId=null;
+
+function mkEntries(){return Array.from({length:48},(_,i)=>({id:i+1,name:"",paid:"",team:"",status:"ACTIVE"}));}
+function mkBracket(){return ROUNDS.flatMap(r=>Array.from({length:r.n},(_,i)=>({id:`${r.id}_${i+1}`,round:r.id,num:i+1,t1:"",t2:"",winner:""})));}
+
+let state={entries:mkEntries(),bracket:mkBracket()};
+
+// ── PERSISTENCE ───────────────────────────────────────────────────
+
+function saveLocal(){
+  try{localStorage.setItem(SK,JSON.stringify(state));}catch(e){}
+}
+
+function loadLocal(){
+  try{
+    const d=localStorage.getItem(SK);
+    if(d){const p=JSON.parse(d);if(p.entries)state.entries=p.entries;if(p.bracket)state.bracket=p.bracket;}
+  }catch(e){}
+}
+
+function encodeState(){
+  try{return btoa(unescape(encodeURIComponent(JSON.stringify(state))));}catch(e){return "";}
+}
+
+function decodeState(s){
+  try{return JSON.parse(decodeURIComponent(escape(atob(s))));}catch(e){return null;}
+}
+
+function loadFromHash(){
+  const h=location.hash.slice(1);
+  if(!h)return false;
+  const d=decodeState(h);
+  if(!d||!d.entries)return false;
+  state=d;
+  isViewMode=true;
+  return true;
+}
+
+function copyShareLink(){
+  const encoded=encodeState();
+  const url=location.origin+location.pathname+"#"+encoded;
+  if(navigator.clipboard){
+    navigator.clipboard.writeText(url).then(()=>alert("✅ Share link copied!\n\nPaste it into WhatsApp. Anyone who opens it will see the current sweepstake.")).catch(()=>prompt("Copy this link:",url));
+  } else {
+    prompt("Copy this link:",url);
+  }
+}
+
+// ── TABS ──────────────────────────────────────────────────────────
+
+let currentTab="draw";
+
+function switchTab(id,btn){
+  document.querySelectorAll(".tab-pane").forEach(p=>p.classList.remove("active"));
+  document.querySelectorAll(".nav-btn").forEach(b=>b.classList.remove("active"));
+  document.getElementById("tab-"+id).classList.add("active");
+  btn.classList.add("active");
+  currentTab=id;
+  if(id==="odds")renderOdds();
+  if(id==="groups")renderGroups();
+  if(id==="bracket")renderBracket();
+}
+
+// ── ADMIN ─────────────────────────────────────────────────────────
+
+function onEditBtn(){
+  if(isViewMode){alert("This is a view-only snapshot.\nTo edit, open the sweepstake on the organiser's device.");return;}
+  if(isAdmin){
+    isAdmin=false;
+    document.getElementById("edit-btn").textContent="✎ EDIT";
+    document.getElementById("edit-btn").classList.remove("active");
+    renderDraw();renderBracket();
+  } else {
+    document.getElementById("pin-overlay").classList.add("show");
+    document.getElementById("pin-input").value="";
+    document.getElementById("pin-input").focus();
+    document.getElementById("pin-err").classList.remove("show");
+    document.getElementById("pin-input").classList.remove("err");
+  }
+}
+
+function checkPin(){
+  const v=document.getElementById("pin-input").value;
+  if(v===PIN){
+    isAdmin=true;
+    document.getElementById("edit-btn").textContent="🔓 EXIT";
+    document.getElementById("edit-btn").classList.add("active");
+    document.getElementById("pin-overlay").classList.remove("show");
+    renderDraw();renderBracket();
+  } else {
+    document.getElementById("pin-err").classList.add("show");
+    document.getElementById("pin-input").classList.add("err");
+    document.getElementById("pin-input").value="";
+  }
+}
+
+function closePinOverlay(e){
+  if(e.target===document.getElementById("pin-overlay"))
+    document.getElementById("pin-overlay").classList.remove("show");
+}
+
+// ── DRAW RENDER ───────────────────────────────────────────────────
+
+function renderStats(){
+  const e=state.entries;
+  const filled=e.filter(x=>x.name).length;
+  const paid=e.filter(x=>x.paid==="YES").length;
+  const drawn=e.filter(x=>x.team).length;
+  document.getElementById("s-spots").textContent=filled+"/48";
+  document.getElementById("s-paid").textContent=paid;
+  document.getElementById("s-pot").textContent="£"+(paid*20);
+  document.getElementById("s-drawn").textContent=drawn;
+}
+
+function renderDraw(){
+  renderStats();
+  const q=(document.getElementById("search").value||"").toLowerCase();
+  const vis=q?state.entries.filter(e=>e.name.toLowerCase().includes(q)||e.team.toLowerCase().includes(q)):state.entries;
+  const list=document.getElementById("entries-list");
+  list.innerHTML=vis.map(e=>{
+    const ko=e.status==="KNOCKED OUT";
+    const paidCls=e.paid==="YES"?"yes":e.paid==="NO"?"no":"";
+    const paidTxt=e.paid==="YES"?"✓ PAID":e.paid==="NO"?"✗ UNPAID":"—";
+    return `<div class="entry-row${ko?" ko":""}${isAdmin?" editable":""}" onclick="${isAdmin?`openEdit(${e.id})`:""}">
+      <div class="entry-num" style="${ko?"background:#bbb":""}">${e.id}</div>
+      <div class="entry-info">
+        <div class="entry-name${e.name?" filled":""}${ko?" ko":""}">${e.name||"— empty slot —"}</div>
+        <div class="entry-team">${e.team||"no team drawn yet"}</div>
+      </div>
+      <div class="paid-badge ${paidCls}">${paidTxt}</div>
+      ${ko?'<div class="out-badge">OUT</div>':""}
+      ${isAdmin?'<div class="edit-icon">✎</div>':""}
+    </div>`;
+  }).join("");
+}
+
+// ── EDIT MODAL ────────────────────────────────────────────────────
+
+function openEdit(id){
+  const e=state.entries.find(x=>x.id===id);
+  if(!e)return;
+  editingId=id;
+  document.getElementById("edit-title").textContent=`Edit Entry #${id}`;
+  document.getElementById("edit-name").value=e.name;
+  updatePaidBtns(e.paid);
+  // populate team select
+  const sel=document.getElementById("edit-team");
+  sel.innerHTML='<option value="">— No team yet —</option>'+TEAMS.map(t=>`<option value="${t.t}"${e.team===t.t?" selected":""}>${t.t} (${t.o})</option>`).join("");
+  updateStatusBtns(e.status);
+  document.getElementById("edit-overlay").classList.add("show");
+  setTimeout(()=>document.getElementById("edit-name").focus(),100);
+}
+
+function updatePaidBtns(v){
+  document.getElementById("btn-yes").className="toggle-btn"+(v==="YES"?" active-yes":"");
+  document.getElementById("btn-no").className="toggle-btn"+(v==="NO"?" active-no":"");
+  document.getElementById("btn-clear").className="toggle-btn"+(v===""?" active-clear":"");
+}
+
+function updateStatusBtns(v){
+  document.getElementById("btn-active").className="toggle-btn"+(v==="ACTIVE"?" active-active":"");
+  document.getElementById("btn-ko").className="toggle-btn"+(v==="KNOCKED OUT"?" active-ko":"");
+}
+
+function setPaid(v){updatePaidBtns(v);}
+function setStatus(v){updateStatusBtns(v);}
+
+function saveEdit(){
+  const e=state.entries.find(x=>x.id===editingId);
+  if(!e)return;
+  e.name=document.getElementById("edit-name").value.trim();
+  e.paid=document.getElementById("btn-yes").classList.contains("active-yes")?"YES":
+         document.getElementById("btn-no").classList.contains("active-no")?"NO":"";
+  e.team=document.getElementById("edit-team").value;
+  e.status=document.getElementById("btn-ko").classList.contains("active-ko")?"KNOCKED OUT":"ACTIVE";
+  saveLocal();
+  closeEdit();
+  renderDraw();
+  if(currentTab==="groups")renderGroups();
+}
+
+function closeEdit(){
+  document.getElementById("edit-overlay").classList.remove("show");
+  editingId=null;
+}
+
+// ── ODDS RENDER ───────────────────────────────────────────────────
+
+function renderOdds(){
+  const tbg=r=>r<=3?"#FFD700":r<=5?"#FFE57F":r<=8?"#D4EDDA":r<=15?"#EBF3FF":r<=25?"#F8F8F8":"#fff";
+  const tfc=r=>r<=3?"#7B5000":"#111";
+  let html=`<div style="background:#0D1B4B;padding:10px 14px;border-bottom:3px solid #FFD700"><div style="color:#9aaecc;font-size:11px;text-align:center">BetMGM / Polymarket · May 2026 · UK fractional odds</div></div>`;
+  TEAMS.forEach(team=>{
+    if(TIER_BREAKS[team.r]){
+      html+=`<div class="section-hdr" style="background:${TIER_BG[team.r]};color:${team.r===1?"#7B5000":"white"}">${TIER_BREAKS[team.r]}</div>`;
+    }
+    const nb=team.r<=3?"#8B6914":"#003DA5";
+    html+=`<div class="odds-row" style="background:${tbg(team.r)}">
+      <div class="odds-num" style="background:${nb}">${team.r}</div>
+      <div class="odds-name" style="font-weight:${team.r<=8?700:400};color:${tfc(team.r)}">${team.t}</div>
+      <div class="odds-conf">${team.c}</div>
+      <div class="odds-val" style="color:${tfc(team.r)};background:${team.r<=3?"rgba(0,0,0,.08)":"transparent"}">${team.o}</div>
+    </div>`;
+  });
+  document.getElementById("odds-list").innerHTML=html;
+}
+
+// ── GROUPS RENDER ─────────────────────────────────────────────────
+
+function renderGroups(){
+  let html="";
+  Object.entries(GROUPS).forEach(([letter,teams],gi)=>{
+    html+=`<div style="margin-bottom:6px"><div class="section-hdr" style="background:${GC[gi]}">▸ GROUP ${letter}</div>`;
+    teams.forEach((team,ti)=>{
+      const owner=state.entries.find(e=>e.team===team);
+      const ko=owner&&owner.status==="KNOCKED OUT";
+      html+=`<div class="group-row" style="background:${ti%2===0?"white":"#f8f9fc"};opacity:${ko?.5:1}">
+        <div class="group-team" style="color:${ko?"#aaa":"#111"};text-decoration:${ko?"line-through":"none"}">${team}</div>
+        <div class="group-owner${owner&&owner.name?" owned":""}">${owner&&owner.name?"👤 "+owner.name:"not drawn"}</div>
+        ${ko?'<div class="out-badge">OUT</div>':""}
+      </div>`;
+    });
+    html+="</div>";
+  });
+  document.getElementById("groups-list").innerHTML=html;
+}
+
+// ── BRACKET RENDER ────────────────────────────────────────────────
+
+function renderBracket(){
+  document.getElementById("bracket-hint").textContent=isAdmin?"Organiser mode — set teams & winners":"Tap EDIT to fill in results · owners shown auto";
+  let html="";
+  ROUNDS.forEach(round=>{
+    const matches=state.bracket.filter(m=>m.round===round.id);
+    const isFin=round.id==="FIN";
+    html+=`<div style="margin-bottom:4px"><div class="section-hdr" style="background:${round.color};color:${isFin?"#000":"white"}">${round.label}</div>`;
+    matches.forEach(match=>{
+      const o1=state.entries.find(e=>e.team===match.t1);
+      const o2=state.entries.find(e=>e.team===match.t2);
+      const ow=state.entries.find(e=>e.team===match.winner);
+      const lbl=round.id==="FIN"?"FINAL":round.id==="3P"?"3RD PLACE":`MATCH ${match.num}`;
+      html+=`<div class="match-card${isFin?" final":" "}" id="mc-${match.id}">
+        <div class="match-label">${lbl}</div>
+        <div class="match-teams">`;
+      if(isAdmin){
+        const t1opts=TEAMS.map(t=>`<option value="${t.t}"${match.t1===t.t?" selected":""}>${t.t}</option>`).join("");
+        const t2opts=TEAMS.map(t=>`<option value="${t.t}"${match.t2===t.t?" selected":""}>${t.t}</option>`).join("");
+        html+=`<select onchange="setMatchTeam('${match.id}','t1',this.value)"><option value="">— Team 1 —</option>${t1opts}</select>
+          <div class="vs">vs</div>
+          <select onchange="setMatchTeam('${match.id}','t2',this.value)"><option value="">— Team 2 —</option>${t2opts}</select>`;
+      } else {
+        html+=`<div class="match-team">
+          <div class="match-team-name">${match.t1||'<span class="tbd">TBD</span>'}</div>
+          ${o1&&o1.name?`<div class="match-team-owner">👤 ${o1.name}</div>`:""}
+        </div>
+        <div class="vs">vs</div>
+        <div class="match-team right">
+          <div class="match-team-name">${match.t2||'<span class="tbd">TBD</span>'}</div>
+          ${o2&&o2.name?`<div class="match-team-owner">👤 ${o2.name}</div>`:""}
+        </div>`;
+      }
+      html+=`</div>`;
+      if(match.t1||match.t2||match.winner){
+        if(isAdmin){
+          const wopts=[match.t1,match.t2].filter(Boolean).map(t=>`<option value="${t}"${match.winner===t?" selected":""}>${t}</option>`).join("");
+          html+=`<div class="winner-row${match.winner?" won":""}">
+            <div class="winner-label">🏆 Winner:</div>
+            <select class="winner-sel" style="background:${match.winner?"#FFF9C4":"white"}" onchange="setMatchWinner('${match.id}',this.value)">
+              <option value="">— Not played yet —</option>${wopts}
+            </select></div>`;
+        } else {
+          html+=`<div class="winner-row${match.winner?" won":""}">
+            <div class="winner-label">🏆 Winner:</div>
+            <div class="winner-text${match.winner?" won":""}">${match.winner||"Not played yet"}${ow&&ow.name?" · 👤 "+ow.name:""}</div>
+          </div>`;
+        }
+      }
+      html+=`</div>`;
+    });
+    html+="</div>";
+  });
+  document.getElementById("bracket-list").innerHTML=html;
+}
+
+function setMatchTeam(id,field,val){
+  const m=state.bracket.find(x=>x.id===id);
+  if(m){m[field]=val;saveLocal();renderBracket();}
+}
+function setMatchWinner(id,val){
+  const m=state.bracket.find(x=>x.id===id);
+  if(m){m.winner=val;saveLocal();renderBracket();}
+}
+
+// ── SHARE BAR ─────────────────────────────────────────────────────
+
+function addShareBar(){
+  const bar=document.getElementById("draw-share-bar");
+  if(bar)return;
+  const sb=document.createElement("div");
+  sb.id="draw-share-bar";
+  sb.className="share-bar";
+  sb.innerHTML=`<span>📤 Send current state to WhatsApp group</span><button class="share-btn" onclick="copyShareLink()">Copy Share Link</button>`;
+  document.getElementById("tab-draw").insertBefore(sb,document.getElementById("tab-draw").firstChild);
+}
+
+// ── INIT ──────────────────────────────────────────────────────────
+
+(function init(){
+  const fromHash=loadFromHash();
+  if(!fromHash){
+    loadLocal();
+  }
+
+  if(isViewMode){
+    document.getElementById("edit-btn").style.display="none";
+    // Add view mode notice
+    const notice=document.createElement("div");
+    notice.className="view-notice";
+    notice.innerHTML=`<b>👁 View-only snapshot</b> · To edit, open on the organiser's device`;
+    document.getElementById("tab-draw").insertBefore(notice,document.getElementById("tab-draw").firstChild);
+  } else {
+    addShareBar();
+  }
+
+  // Build team select options once
+  const sel=document.getElementById("edit-team");
+  sel.innerHTML='<option value="">— No team yet —</option>'+TEAMS.map(t=>`<option value="${t.t}">${t.t} (${t.o})</option>`).join("");
+
+  renderDraw();
+  renderOdds();
+  renderGroups();
+  renderBracket();
+})();
+</script>
+
+
+</body></html>
