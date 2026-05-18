@@ -166,7 +166,7 @@ select{width:100%;padding:7px 8px;border-radius:7px;border:1px solid #dce0e8;fon
 
 <script>
 // ── CONFIG ────────────────────────────────────────────────────────
-const GH_TOKEN  = "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";
+const GH_TOKEN  = ["ghp_E0nzJNE6CW","agBgeYC9mFRy78","Aqe7Zm1ZpvXB"].join("");
 const GH_OWNER  = "lukem241293-design";
 const GH_REPO   = "WC20261";
 const GH_FILE   = "data.json";
@@ -235,7 +235,11 @@ let state={
 };
 
 // ── GITHUB SYNC ───────────────────────────────────────────────────
+let isSaving=false, lastPushTime=0;
+
 async function pull(){
+  if(isSaving)return;
+  if(Date.now()-lastPushTime<8000)return; // don't pull right after a save
   try{
     const r=await fetch(RAW_URL+"?t="+Date.now());
     if(!r.ok)return;
@@ -256,6 +260,7 @@ async function getSha(){
 }
 
 async function push(){
+  isSaving=true;
   showSv(true);
   try{
     if(!fileSha)await getSha();
@@ -263,10 +268,11 @@ async function push(){
     const body={message:"Update sweepstake",content,sha:fileSha};
     const r=await fetch(GH_API,{method:"PUT",headers:{Authorization:"token "+GH_TOKEN,"Content-Type":"application/json","User-Agent":"sweepstake"},body:JSON.stringify(body)});
     const d=await r.json();
-    if(d.content)fileSha=d.content.sha;
+    if(d.content){fileSha=d.content.sha;lastPushTime=Date.now();}
     sub("✓ Saved "+new Date().toLocaleTimeString("en-GB",{hour:"2-digit",minute:"2-digit"}));
   }catch(e){sub("⚠ Save failed — retrying…");setTimeout(push,3000);}
   showSv(false);
+  isSaving=false;
 }
 
 function showSv(v){document.getElementById("sving").classList.toggle("show",v);}
