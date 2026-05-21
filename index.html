@@ -102,7 +102,7 @@ select{width:100%;padding:7px 8px;border-radius:7px;border:1px solid #dce0e8;fon
         <div class="stat"><div class="stat-val" id="sm">£0</div><div class="stat-lbl">Pot</div></div>
         <div class="stat"><div class="stat-val" id="sd">0</div><div class="stat-lbl">Drawn</div></div>
       </div>
-      <div class="rules-bar"><b style="color:var(--gold)">📋 Rules: </b>48 teams · £20/team · random draw June · <b style="color:var(--gold)">🥇 £900</b> winner · <b style="color:#bbb">🥈 £60</b> runner-up</div>
+      <div class="rules-bar"><b style="color:var(--gold)">📋 Rules: </b>48 teams · £10/team · random draw June · <b style="color:var(--gold)">🥇 £400</b> winner · <b style="color:#bbb">🥈 £80</b> runner-up</div>
       <div class="search-box"><input id="srch" type="text" placeholder="🔍  Search name or team…" oninput="rdraw()"></div>
       <div id="elist"></div>
     </div>
@@ -312,7 +312,7 @@ function rdraw(){
   const e=state.entries;
   document.getElementById("ss").textContent=e.filter(x=>x.name).length+"/48";
   document.getElementById("sp").textContent=e.filter(x=>x.paid==="YES").length;
-  document.getElementById("sm").textContent="£"+(e.filter(x=>x.paid==="YES").length*20);
+  document.getElementById("sm").textContent="£"+(e.filter(x=>x.paid==="YES").length*10);
   document.getElementById("sd").textContent=e.filter(x=>x.team).length;
   const q=(document.getElementById("srch").value||"").toLowerCase();
   const vis=q?e.filter(x=>x.name.toLowerCase().includes(q)||x.team.toLowerCase().includes(q)):e;
