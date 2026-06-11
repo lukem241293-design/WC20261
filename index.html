@@ -144,6 +144,12 @@ body{font-family:-apple-system,BlinkMacSystemFont,'SF Pro Display','Segoe UI',sa
       <div id="elist"></div>
     </div>
 
+    <!-- ODDS -->
+    <div id="tab-odds" class="tab-pane">
+      <div class="tab-intro"><div>BetMGM / Polymarket · May 2026 · UK fractional odds · for reference only</div></div>
+      <div id="olist"></div>
+    </div>
+
     <!-- GROUPS -->
     <div id="tab-groups" class="tab-pane">
       <div class="tab-intro"><div>Standings update automatically from results · top 2 qualify · tap match to enter score</div></div>
@@ -165,6 +171,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'SF Pro Display','Segoe UI',sa
 
   <div id="bottom-nav">
     <button class="nav-btn active" onclick="stab('draw',this)"><span class="icon">⚽</span><span class="lbl">Draw</span><div class="nav-dot"></div></button>
+    <button class="nav-btn" onclick="stab('odds',this)"><span class="icon">📊</span><span class="lbl">Odds</span><div class="nav-dot"></div></button>
     <button class="nav-btn" onclick="stab('groups',this)"><span class="icon">🌍</span><span class="lbl">Groups</span><div class="nav-dot"></div></button>
     <button class="nav-btn" onclick="stab('results',this)"><span class="icon">📋</span><span class="lbl">Results</span><div class="nav-dot"></div></button>
     <button class="nav-btn" onclick="stab('bracket',this)"><span class="icon">🏆</span><span class="lbl">Bracket</span><div class="nav-dot"></div></button>
@@ -398,7 +405,25 @@ function calcStandings(g){
 }
 
 // ── RENDER ────────────────────────────────────────────────────────
-function rall(){rdraw();rgroups();rresults();rbracket();}
+function rall(){rdraw();rodds();rgroups();rresults();rbracket();}
+
+function rodds(){
+  const tbg=r=>r<=3?"#FFD700":r<=5?"#FFE57F":r<=8?"#D4EDDA":r<=15?"#EBF3FF":r<=25?"#F8F8F8":"#fff";
+  const tfc=r=>r<=3?"#7B5000":"#111";
+  const TBREAKS={1:"🏆 ELITE FAVOURITES",4:"⭐ STRONG CONTENDERS",9:"🔵 SECOND TIER",16:"🟡 MID-RANGE",26:"⚪ LONG SHOTS",39:"🔴 VERY LONG SHOTS"};
+  const TBG={1:"#FFD700",4:"#1B5E20",9:"#003DA5",16:"#7B6200",26:"#424242",39:"#C8102E"};
+  let h="";
+  TEAMS.forEach(t=>{
+    if(TBREAKS[t.r])h+=`<div class="shdr" style="background:${TBG[t.r]};color:${t.r===1?"#7B5000":"white"}">${TBREAKS[t.r]}</div>`;
+    h+=`<div style="display:flex;align-items:center;gap:10px;padding:10px 14px;background:${tbg(t.r)};border-bottom:1px solid rgba(0,0,0,.05)">
+      <div style="width:24px;height:24px;border-radius:12px;flex-shrink:0;background:${t.r<=3?"#8B6914":"#003DA5"};color:white;display:flex;align-items:center;justify-content:center;font-size:9px;font-weight:700">${t.r}</div>
+      <div style="flex:1;font-size:13px;font-weight:${t.r<=8?700:400};color:${tfc(t.r)}">${t.t}</div>
+      <div style="font-size:9px;color:#999;flex-shrink:0">${t.c}</div>
+      <div style="font-weight:700;font-size:13px;color:${tfc(t.r)};padding:2px 8px;border-radius:6px;background:${t.r<=3?"rgba(0,0,0,.08)":"transparent"};flex-shrink:0">${t.o}</div>
+    </div>`;
+  });
+  document.getElementById("olist").innerHTML=h;
+}
 
 function rdraw(){
   const e=state.entries;
