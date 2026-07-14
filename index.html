@@ -112,6 +112,34 @@ body{font-family:-apple-system,BlinkMacSystemFont,'SF Pro Display','Segoe UI',sa
 .perr{color:var(--red);font-size:13px;margin-bottom:8px;display:none}.perr.show{display:block}
 .punlock{width:100%;padding:14px;border-radius:10px;border:none;background:var(--blue);color:white;font-weight:700;font-size:15px;cursor:pointer;font-family:inherit}
 .tbd{color:#ccc;font-style:italic}
+
+/* ── SEMI-FINAL & FINAL EXCITEMENT ── */
+.sf-banner{background:linear-gradient(135deg,#1a0533 0%,#4A148C 50%,#1a0533 100%);padding:14px;text-align:center;border-bottom:3px solid #FFD700;position:relative;overflow:hidden}
+.sf-banner::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse at 50% 0%,rgba(255,215,0,.15),transparent 70%);pointer-events:none}
+.sf-banner-title{color:#FFD700;font-weight:800;font-size:18px;letter-spacing:1px;text-shadow:0 0 20px rgba(255,215,0,.5)}
+.sf-banner-sub{color:rgba(255,255,255,.7);font-size:11px;margin-top:4px}
+.sf-match-card{background:linear-gradient(180deg,#0D1B4B 0%,#1a2a6c 100%);border-bottom:none;margin:8px 12px;border-radius:14px;padding:14px;box-shadow:0 4px 20px rgba(0,0,0,.4)}
+.sf-match-card .rc-name{font-size:14px;font-weight:700;color:white}
+.sf-match-card .rc-owner{color:#FFD700}
+.sf-sbox{width:36px;height:36px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:18px;font-weight:800}
+.sf-sbox.empty{background:rgba(255,255,255,.1);color:rgba(255,255,255,.4);border:2px dashed rgba(255,255,255,.3)}
+.sf-sbox.played{background:#FFD700;color:#7B5000}
+.sf-sbox.win{background:#FFD700;color:#7B5000;box-shadow:0 0 12px rgba(255,215,0,.6)}
+.sf-vs{font-size:16px;color:rgba(255,255,255,.4);font-weight:700;flex-shrink:0}
+.sf-kickoff{margin-top:10px;text-align:center;font-size:11px;color:rgba(255,255,255,.5);background:rgba(255,255,255,.05);border-radius:8px;padding:5px 10px}
+.sf-kickoff b{color:#FFD700}
+.sf-winner-row{margin-top:10px;background:rgba(255,215,0,.15);border-radius:8px;padding:7px 12px;border:1px solid rgba(255,215,0,.3);text-align:center;font-size:12px;font-weight:700;color:#FFD700}
+.fin-banner{background:linear-gradient(135deg,#7B5000 0%,#B8860B 30%,#FFD700 50%,#B8860B 70%,#7B5000 100%);padding:16px;text-align:center;border-bottom:none;position:relative;overflow:hidden}
+.fin-banner-title{color:#000;font-weight:900;font-size:20px;letter-spacing:2px;text-shadow:none}
+.fin-banner-sub{color:rgba(0,0,0,.6);font-size:11px;margin-top:4px}
+.fin-match-card{background:linear-gradient(180deg,#3d2a00 0%,#5c3d00 100%);margin:8px 12px;border-radius:14px;padding:14px;box-shadow:0 4px 24px rgba(255,215,0,.3);border:2px solid rgba(255,215,0,.4)}
+.fin-match-card .rc-name{font-size:15px;font-weight:800;color:#FFD700}
+.fin-match-card .rc-owner{color:white}
+.live-badge{display:inline-block;background:#C8102E;color:white;font-size:9px;font-weight:700;padding:2px 6px;border-radius:10px;letter-spacing:1px;animation:pulse 1.5s infinite}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.5}}
+.auto-update-bar{background:#0a2a0a;padding:7px 14px;font-size:10px;color:#90EE90;text-align:center;border-bottom:1px solid #1a4a1a;display:flex;align-items:center;justify-content:center;gap:8px}
+.auto-update-bar .dot{width:7px;height:7px;border-radius:50%;background:#4CAF50;animation:pulse 2s infinite;flex-shrink:0}
+
 .sving{position:fixed;top:60px;right:10px;background:rgba(0,0,0,.75);color:white;padding:5px 12px;border-radius:20px;font-size:11px;z-index:500;opacity:0;transition:opacity .3s}
 .sving.show{opacity:1}
 .tab-intro{background:var(--dark);padding:10px 14px;border-bottom:3px solid var(--gold)}
@@ -130,6 +158,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'SF Pro Display','Segoe UI',sa
     </div>
   </div>
 
+  <div id="auto-bar" class="auto-update-bar"><div class="dot"></div><span id="auto-txt">🔄 Checking for live scores…</span></div>
   <div id="content">
     <!-- DRAW -->
     <div id="tab-draw" class="tab-pane active">
@@ -322,6 +351,96 @@ let state={
 };
 
 // ── SYNC ──────────────────────────────────────────────────────────
+
+// ESPN team code → our team name
+const ESPN_MAP={
+  "ARG":"🇦🇷 Argentina","ENG":"🏴󠁧󠁢󠁥󠁮󠁧󠁿 England","FRA":"🇫🇷 France","ESP":"🇪🇸 Spain",
+  "NOR":"🇳🇴 Norway","BRA":"🇧🇷 Brazil","GER":"🇩🇪 Germany","NED":"🇳🇱 Netherlands",
+  "MAR":"🇲🇦 Morocco","BEL":"🇧🇪 Belgium","USA":"🇺🇸 USA","POR":"🇵🇹 Portugal",
+  "SUI":"🇨🇭 Switzerland","COL":"🇨🇴 Colombia","MEX":"🇲🇽 Mexico","PAR":"🇵🇾 Paraguay",
+  "EGY":"🇪🇬 Egypt","JAP":"🇯🇵 Japan","CRO":"🇭🇷 Croatia","CAN":"🇨🇦 Canada",
+  "SEN":"🇸🇳 Senegal","AUS":"🇦🇺 Australia","GHA":"🇬🇭 Ghana","URU":"🇺🇾 Uruguay",
+  "SWE":"🇸🇪 Sweden","TUR":"🇹🇷 Turkey","ECU":"🇪🇨 Ecuador","AUT":"🇦🇹 Austria",
+  "RSA":"🇿🇦 South Africa","BOL":"🇧🇦 Bosnia & Herz.","IVC":"🇨🇮 Ivory Coast",
+  "CGO":"🇨🇩 DR Congo","IRQ":"🇮🇶 Iraq","ALG":"🇩🇿 Algeria","JPN":"🇯🇵 Japan",
+  "BIH":"🇧🇦 Bosnia & Herz.","COD":"🇨🇩 DR Congo","CPV":"🇨🇻 Cape Verde",
+  "SCO":"🏴󠁧󠁢󠁳󠁣󠁴󠁿 Scotland","CIV":"🇨🇮 Ivory Coast"
+};
+
+let liveScoreCache={}, lastLiveFetch=0, liveFetchInterval=null;
+
+async function fetchLiveScores(){
+  try{
+    const r=await fetch("https://site.api.espn.com/apis/site/v2/sports/soccer/fifa.world/scoreboard?limit=50&t="+Date.now());
+    if(!r.ok)return;
+    const d=await r.json();
+    const events=d.events||[];
+    let updated=false;
+    events.forEach(ev=>{
+      const comp=ev.competitions?.[0];if(!comp)return;
+      const comps=comp.competitors||[];if(comps.length<2)return;
+      const home=comps.find(c=>c.homeAway==="home")||comps[0];
+      const away=comps.find(c=>c.homeAway==="away")||comps[1];
+      const t1Name=ESPN_MAP[home.team?.abbreviation]||home.team?.displayName||"";
+      const t2Name=ESPN_MAP[away.team?.abbreviation]||away.team?.displayName||"";
+      const s1=home.score||"";
+      const s2=away.score||"";
+      const status=ev.status?.type?.state||""; // pre, in, post
+      const completed=ev.status?.type?.completed||false;
+      if(!t1Name||!t2Name)return;
+      // Find matching bracket match
+      const match=state.bracket.find(m=>(m.t1===t1Name&&m.t2===t2Name)||(m.t1===t2Name&&m.t2===t1Name));
+      if(!match)return;
+      const swapped=match.t1===t2Name;
+      const ms1=swapped?s2:s1, ms2=swapped?s1:s2;
+      const liveKey=match.id;
+      if(liveScoreCache[liveKey]===ms1+"-"+ms2&&match.played===completed)return;
+      liveScoreCache[liveKey]=ms1+"-"+ms2;
+      match.score1=ms1; match.score2=ms2; match.played=completed;
+      if(completed&&ms1!=""&&ms2!=""){
+        if(parseInt(ms1)>parseInt(ms2))match.winner=match.t1;
+        else if(parseInt(ms2)>parseInt(ms1))match.winner=match.t2;
+      }
+      updated=true;
+    });
+    if(updated){push();rall();}
+    lastLiveFetch=Date.now();
+    updateAutoBar(events.filter(e=>e.status?.type?.state==="in").length);
+  }catch(e){console.log("ESPN fetch failed",e);}
+}
+
+function updateAutoBar(liveCount){
+  const el=document.getElementById("auto-txt");
+  if(!el)return;
+  if(liveCount>0){el.innerHTML=`<span class="live-badge">LIVE</span> ${liveCount} match${liveCount>1?"es":""} in progress · Auto-updating`;}
+  else{el.textContent="✓ Live scores checked · "+new Date().toLocaleTimeString("en-GB",{hour:"2-digit",minute:"2-digit"});}
+}
+
+function isMatchWindow(){
+  // SF1: July 14 20:00-23:00 UK, SF2: July 15 20:00-23:00 UK
+  // 3rd: July 18 22:00-01:00 UK, Final: July 19 20:00-23:00 UK
+  const now=new Date();
+  const h=now.getUTCHours(), day=now.getUTCDate(), mo=now.getUTCMonth()+1;
+  if(mo!==7)return false;
+  const windows=[
+    {d:14,h1:19,h2:24},{d:15,h1:19,h2:24},
+    {d:18,h1:21,h2:25},{d:19,h1:19,h2:24}
+  ];
+  return windows.some(w=>day===w.d&&h>=w.h1&&h<=w.h2);
+}
+
+function startLiveFetch(){
+  fetchLiveScores();
+  const interval=isMatchWindow()?5*60*1000:60*60*1000; // 5min during games, 1hr otherwise
+  if(liveFetchInterval)clearInterval(liveFetchInterval);
+  liveFetchInterval=setInterval(()=>{
+    fetchLiveScores();
+    // Reset interval in case window status changed
+    const newInterval=isMatchWindow()?5*60*1000:60*60*1000;
+    if(liveFetchInterval){clearInterval(liveFetchInterval);liveFetchInterval=setInterval(fetchLiveScores,newInterval);}
+  },interval);
+}
+
 async function pull(){
   if(isSaving||Date.now()-lastPushTime<90000)return;
   try{
@@ -558,7 +677,9 @@ function rresults(){
             ${o2&&o2.name?`<div class="rc-owner">👤 ${o2.name}</div>`:""}
           </div>
         </div>
-        ${m.winner?`<div class="rc-winner">🏆 ${m.winner}${ow&&ow.name?" — 👤 "+ow.name:""}</div>`:""}
+        ${m.winner?`<div class="${isSF||isFin?"sf-winner-row":"rc-winner"}">🏆 ${m.winner}${ow&&ow.name?" — 👤 "+ow.name:""}</div>`:""}
+        ${(isSF&&!m.played&&sfKickoffs[m.id])?`<div class="sf-kickoff"><b>⏰ Kick-off:</b> ${sfKickoffs[m.id]}</div>`:""}
+        ${(isFin&&!m.played)?`<div class="sf-kickoff"><b>⏰ Kick-off:</b> Sun 19 Jul · 20:00 UK · MetLife Stadium, NJ</div>`:""}
       </div>`;
     });
     h+=`</div>`;
@@ -572,12 +693,41 @@ function rbracket(){
   ROUNDS.forEach(round=>{
     const ms=state.bracket.filter(m=>m.round===round.id);
     const isFin=round.id==="FIN";
-    h+=`<div style="margin-bottom:4px"><div class="shdr" style="background:${round.color};color:${isFin?"#000":"white"}">${round.label}</div>`;
+    const isSF=round.id==="SF";
+    const is3P=round.id==="3P";
+
+    // Special SF banner
+    if(isSF){
+      h+=`<div class="sf-banner">
+        <div class="sf-banner-title">🏟️ SEMI-FINALS</div>
+        <div class="sf-banner-sub">The last four · Winners meet in the Final on 19 July</div>
+      </div>`;
+    }
+    // Special Final banner
+    if(isFin){
+      h+=`<div class="fin-banner">
+        <div class="fin-banner-title">🏆 THE WORLD CUP FINAL</div>
+        <div class="fin-banner-sub">Sunday 19 July · MetLife Stadium, New Jersey</div>
+      </div>`;
+    }
+    if(is3P){
+      h+=`<div style="background:#546E7A;padding:10px 14px;text-align:center">
+        <div style="color:white;font-weight:700;font-size:13px">🥉 3RD PLACE PLAY-OFF</div>
+        <div style="color:rgba(255,255,255,.6);font-size:10px;margin-top:2px">Saturday 18 July · Miami</div>
+      </div>`;
+    }
+
+    if(!isSF&&!isFin&&!is3P) h+=`<div style="margin-bottom:4px"><div class="shdr" style="background:${round.color};color:white">${round.label}</div>`;
+    else if(!isSF&&!isFin&&!is3P) h+=`<div style="margin-bottom:4px">`;
+    else h+=`<div style="margin-bottom:${isFin?"16":"8"}px">`;
     ms.forEach(m=>{
       const o1=state.entries.find(e=>e.team===m.t1),o2=state.entries.find(e=>e.team===m.t2),ow=state.entries.find(e=>e.team===m.winner);
       const lbl=round.id==="FIN"?"FINAL":round.id==="3P"?"3RD PLACE":`MATCH ${m.num}`;
-      h+=`<div style="padding:10px 14px;background:${isFin?"#FFFDE7":"white"};border-bottom:1px solid #eef0f3">
-        <div style="font-size:10px;color:#9aaecc;margin-bottom:7px;font-weight:600;letter-spacing:.5px">${lbl}</div>
+      const sfKickoffs={"SF_1":"Tue 14 Jul · 20:00 UK · Dallas","SF_2":"Wed 15 Jul · 20:00 UK · Atlanta"};
+      const cardClass=isSF?"sf-match-card":isFin?"fin-match-card":"";
+      const cardStyle=(!isSF&&!isFin)?`padding:10px 14px;background:${is3P?"#ECEFF1":"white"};border-bottom:1px solid #eef0f3`:"";
+      h+=`<div${cardClass?` class="${cardClass}"`:""} style="${cardStyle}">
+        <div style="font-size:10px;color:${isSF||isFin?"rgba(255,255,255,.5)":"#9aaecc"};margin-bottom:7px;font-weight:600;letter-spacing:.5px">${lbl}${m.played?"":(isSF||isFin)?"":" · UPCOMING"}</div>
         <div style="display:flex;gap:6px;align-items:center;margin-bottom:7px">`;
       if(isAdmin){
         const t1o=TEAMS.map(t=>`<option value="${t.t}"${m.t1===t.t?" selected":""}>${t.t}</option>`).join("");
@@ -708,6 +858,7 @@ document.getElementById("eteam").innerHTML='<option value="">— No team yet —
 getSha();
 pull();
 setInterval(pull,15000);
+startLiveFetch();
 </script>
 </body>
 </html>
