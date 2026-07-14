@@ -413,32 +413,51 @@ function updateAutoBar(liveCount){
   const el=document.getElementById("auto-txt");
   if(!el)return;
   if(liveCount>0){el.innerHTML=`<span class="live-badge">LIVE</span> ${liveCount} match${liveCount>1?"es":""} in progress · Auto-updating`;}
-  else{el.textContent="✓ Live scores checked · "+new Date().toLocaleTimeString("en-GB",{hour:"2-digit",minute:"2-digit"});}
+  else{el.textContent="✓ Scores checked · "+new Date().toLocaleTimeString("en-GB",{hour:"2-digit",minute:"2-digit"});}
 }
 
+const TOURNAMENT_END=new Date("2026-07-19T23:59:00Z");
+
+function isTournamentOver(){return new Date()>TOURNAMENT_END;}
+
 function isMatchWindow(){
-  // SF1: July 14 20:00-23:00 UK, SF2: July 15 20:00-23:00 UK
-  // 3rd: July 18 22:00-01:00 UK, Final: July 19 20:00-23:00 UK
+  if(isTournamentOver())return false;
   const now=new Date();
   const h=now.getUTCHours(), day=now.getUTCDate(), mo=now.getUTCMonth()+1;
   if(mo!==7)return false;
+  // SF1 Jul14 19:00-23:30 UTC, SF2 Jul15 19:00-23:30 UTC
+  // 3rd Jul18 21:00-01:30 UTC+1, Final Jul19 19:00-23:30 UTC
   const windows=[
     {d:14,h1:19,h2:24},{d:15,h1:19,h2:24},
-    {d:18,h1:21,h2:25},{d:19,h1:19,h2:24}
+    {d:18,h1:21,h2:24},{d:19,h1:19,h2:24}
   ];
-  return windows.some(w=>day===w.d&&h>=w.h1&&h<=w.h2);
+  return windows.some(w=>day===w.d&&h>=w.h1&&h<w.h2);
 }
 
 function startLiveFetch(){
+  if(isTournamentOver()){
+    const el=document.getElementById("auto-bar");
+    if(el)el.style.display="none";
+    return;
+  }
+  if(!isMatchWindow()){
+    const el=document.getElementById("auto-txt");
+    if(el)el.textContent="Next match: "+["","","","","","","","","","","","","","","","","","","","","SF2 Wed 15 Jul 20:00 UK","3rd Sat 18 Jul 22:00 UK","Final Sun 19 Jul 20:00 UK"][new Date().getUTCDate()]||"check back at match time";
+    // Check again in 10 minutes to see if window opened
+    setTimeout(startLiveFetch, 10*60*1000);
+    return;
+  }
   fetchLiveScores();
-  const interval=isMatchWindow()?5*60*1000:60*60*1000; // 5min during games, 1hr otherwise
   if(liveFetchInterval)clearInterval(liveFetchInterval);
   liveFetchInterval=setInterval(()=>{
+    if(!isMatchWindow()||isTournamentOver()){
+      clearInterval(liveFetchInterval);
+      liveFetchInterval=null;
+      setTimeout(startLiveFetch, 10*60*1000);
+      return;
+    }
     fetchLiveScores();
-    // Reset interval in case window status changed
-    const newInterval=isMatchWindow()?5*60*1000:60*60*1000;
-    if(liveFetchInterval){clearInterval(liveFetchInterval);liveFetchInterval=setInterval(fetchLiveScores,newInterval);}
-  },interval);
+  }, 5*60*1000); // 5 min during game windows only
 }
 
 async function pull(){
@@ -616,76 +635,122 @@ function rgroups(){
 }
 
 function rresults(){
-  document.getElementById("results-hint").textContent=isAdmin?"Organiser mode — tap any match to enter score":"Tournament results · owners shown automatically";
+  document.getElementById("results-hint").textContent=isAdmin?"Organiser mode — tap any match to enter score":"Semi-final lineup · owners shown automatically";
   let h="";
-  // Group stage
-  h+=`<div class="round-section"><div class="round-hdr" style="background:#37474F">GROUP STAGE RESULTS</div>`;
-  Object.entries(GROUPS).forEach(([letter,teams],gi)=>{
-    const matches=state.groupMatches.filter(m=>m.group===letter);
-    h+=`<div style="background:${GC[gi]};padding:5px 14px;font-size:10px;font-weight:700;color:rgba(255,255,255,.8);letter-spacing:1px">GROUP ${letter}</div>`;
-    matches.forEach(m=>{
-      const o1=state.entries.find(e=>e.team===m.team1);
-      const o2=state.entries.find(e=>e.team===m.team2);
-      const s1win=m.played&&(parseInt(m.score1)||0)>(parseInt(m.score2)||0);
-      const s2win=m.played&&(parseInt(m.score2)||0)>(parseInt(m.score1)||0);
-      h+=`<div class="result-card${isAdmin?" clickable":""}" onclick="${isAdmin?`omatch('${m.id}')`:""}">
-        <div class="rc-teams">
-          <div class="rc-team">
-            <div class="rc-name" style="font-weight:${s1win?700:400}">${m.team1}</div>
-            ${o1&&o1.name?`<div class="rc-owner">👤 ${o1.name}</div>`:""}
-          </div>
-          <div class="rc-score">
-            <div class="rc-sbox ${m.played?(s1win?"win":"played"):"empty"}">${m.played?(m.score1||0):"?"}</div>
-            <div class="rc-dash">—</div>
-            <div class="rc-sbox ${m.played?(s2win?"win":"played"):"empty"}">${m.played?(m.score2||0):"?"}</div>
-          </div>
-          <div class="rc-team r">
-            <div class="rc-name" style="font-weight:${s2win?700:400}">${m.team2}</div>
-            ${o2&&o2.name?`<div class="rc-owner">👤 ${o2.name}</div>`:""}
-          </div>
+
+  // ── SEMI-FINALS (top, prominently) ──
+  const sfMatches=state.bracket.filter(m=>m.round==="SF");
+  const finMatch=state.bracket.find(m=>m.round==="FIN");
+  const tpMatch=state.bracket.find(m=>m.round==="3P");
+  const sfKO={"SF_1":"Tue 14 Jul · 20:00 UK · Dallas","SF_2":"Wed 15 Jul · 20:00 UK · Atlanta"};
+
+  h+=`<div class="sf-banner">
+    <div class="sf-banner-title">🏟️ SEMI-FINALS</div>
+    <div class="sf-banner-sub">Winners meet in the Final · Sun 19 Jul · MetLife Stadium, NJ</div>
+  </div>`;
+
+  sfMatches.forEach(m=>{
+    const o1=state.entries.find(e=>e.team===m.t1);
+    const o2=state.entries.find(e=>e.team===m.t2);
+    const ow=state.entries.find(e=>e.team===m.winner);
+    const s1w=m.winner&&m.winner===m.t1, s2w=m.winner&&m.winner===m.t2;
+    h+=`<div class="sf-match-card"${isAdmin?` onclick="obmatch('${m.id}')" style="cursor:pointer"`:""}>
+      <div style="font-size:9px;color:rgba(255,255,255,.4);font-weight:600;letter-spacing:1px;margin-bottom:8px">
+        ${m.id==="SF_1"?"SEMI-FINAL 1":"SEMI-FINAL 2"}
+        ${!m.played&&!m.winner?'<span class="live-badge" style="margin-left:6px">UPCOMING</span>':""}
+        ${m.played&&m.winner?'<span style="background:#4CAF50;color:white;font-size:9px;font-weight:700;padding:2px 6px;border-radius:10px;margin-left:6px">FT</span>':""}
+      </div>
+      <div style="display:flex;align-items:center;gap:8px">
+        <div style="flex:1;min-width:0">
+          <div class="rc-name" style="font-size:15px;font-weight:${s1w?800:600};color:${s1w?"#FFD700":"white"}">${m.t1||'<span style="color:rgba(255,255,255,.3);font-style:italic">TBD</span>'}</div>
+          ${o1&&o1.name?`<div class="rc-owner">👤 ${o1.name}</div>`:""}
         </div>
-      </div>`;
-    });
+        <div style="display:flex;gap:6px;align-items:center;flex-shrink:0">
+          <div class="sf-sbox ${m.t1?(s1w?"win":"played"):"empty"}">${m.played?(m.score1!==undefined&&m.score1!==""?m.score1:"?"):(m.t1?"–":"?")}</div>
+          <div class="sf-vs">v</div>
+          <div class="sf-sbox ${m.t2?(s2w?"win":"played"):"empty"}">${m.played?(m.score2!==undefined&&m.score2!==""?m.score2:"?"):(m.t2?"–":"?")}</div>
+        </div>
+        <div style="flex:1;min-width:0;text-align:right">
+          <div class="rc-name" style="font-size:15px;font-weight:${s2w?800:600};color:${s2w?"#FFD700":"white"}">${m.t2||'<span style="color:rgba(255,255,255,.3);font-style:italic">TBD</span>'}</div>
+          ${o2&&o2.name?`<div class="rc-owner" style="text-align:right">👤 ${o2.name}</div>`:""}
+        </div>
+      </div>
+      ${m.winner?`<div class="sf-winner-row">🏆 ${m.winner}${ow&&ow.name?" — 👤 "+ow.name:""}</div>`:""}
+      ${!m.played?`<div class="sf-kickoff"><b>⏰ Kick-off:</b> ${sfKO[m.id]||""}</div>`:""}
+    </div>`;
   });
-  h+=`</div>`;
-  // Knockout rounds
-  ROUNDS.forEach(round=>{
-    const ms=state.bracket.filter(m=>m.round===round.id);
-    const isFin=round.id==="FIN";
-    h+=`<div class="round-section"><div class="round-hdr" style="background:${round.color};color:${isFin?"#000":"white"}">${round.label}</div>`;
-    ms.forEach(m=>{
+
+  // ── 3RD PLACE & FINAL ──
+  if(tpMatch||finMatch){
+    h+=`<div style="background:#455A64;padding:8px 14px;font-weight:700;font-size:12px;color:white;margin-top:8px">3RD PLACE & THE FINAL</div>`;
+    [tpMatch,finMatch].filter(Boolean).forEach(m=>{
+      if(!m)return;
+      const isFin=m.round==="FIN";
       const o1=state.entries.find(e=>e.team===m.t1);
       const o2=state.entries.find(e=>e.team===m.t2);
       const ow=state.entries.find(e=>e.team===m.winner);
-      const s1win=m.winner&&m.winner===m.t1;
-      const s2win=m.winner&&m.winner===m.t2;
-      const lbl=round.id==="FIN"?"FINAL":round.id==="3P"?"3RD PLACE PLAY-OFF":`MATCH ${m.num}`;
-      h+=`<div class="result-card${isFin?" final-card":""}${isAdmin?" clickable":""}" onclick="${isAdmin?`obmatch('${m.id}')`:""}">
-        <div class="rc-label">${lbl}</div>
-        <div class="rc-teams">
+      const s1w=m.winner&&m.winner===m.t1, s2w=m.winner&&m.winner===m.t2;
+      h+=`<div class="${isFin?"fin-match-card":"result-card"}" style="${isFin?"":"padding:10px 14px;background:#ECEFF1;border-bottom:1px solid #e0e0e0"}">
+        <div class="rc-label" style="color:${isFin?"rgba(255,255,255,.5)":"#9aaecc"}">${isFin?"⭐ FINAL — Sun 19 Jul":"🥉 3RD PLACE — Sat 18 Jul"}</div>
+        <div class="rc-teams" style="margin-top:6px">
           <div class="rc-team">
-            <div class="rc-name${s1win?" qualify":""}" style="font-weight:${s1win?700:400}">${m.t1||'<span class="tbd">TBD</span>'}</div>
+            <div class="rc-name" style="font-weight:${s1w?700:500};color:${isFin?"#FFD700":"#111"}">${m.t1||"<span style='color:#bbb;font-style:italic'>Winner SF1</span>"}</div>
             ${o1&&o1.name?`<div class="rc-owner">👤 ${o1.name}</div>`:""}
           </div>
           <div class="rc-score">
-            <div class="rc-sbox ${m.t1?(s1win?"win":"played"):"empty"}">${m.t1?(m.score1!==undefined&&m.score1!==""?m.score1:"?"):"?"}</div>
+            <div class="rc-sbox ${m.t1?(s1w?"win":"played"):"empty"}">${m.played?(m.score1||0):"?"}</div>
             <div class="rc-dash">—</div>
-            <div class="rc-sbox ${m.t2?(s2win?"win":"played"):"empty"}">${m.t2?(m.score2!==undefined&&m.score2!==""?m.score2:"?"):"?"}</div>
+            <div class="rc-sbox ${m.t2?(s2w?"win":"played"):"empty"}">${m.played?(m.score2||0):"?"}</div>
           </div>
           <div class="rc-team r">
-            <div class="rc-name" style="font-weight:${s2win?700:400}">${m.t2||'<span class="tbd">TBD</span>'}</div>
+            <div class="rc-name" style="font-weight:${s2w?700:500};color:${isFin?"#FFD700":"#111"}">${m.t2||"<span style='color:#bbb;font-style:italic'>Winner SF2</span>"}</div>
             ${o2&&o2.name?`<div class="rc-owner">👤 ${o2.name}</div>`:""}
           </div>
         </div>
-        ${m.winner?`<div class="${isSF||isFin?"sf-winner-row":"rc-winner"}">🏆 ${m.winner}${ow&&ow.name?" — 👤 "+ow.name:""}</div>`:""}
-        ${(isSF&&!m.played&&sfKickoffs[m.id])?`<div class="sf-kickoff"><b>⏰ Kick-off:</b> ${sfKickoffs[m.id]}</div>`:""}
-        ${(isFin&&!m.played)?`<div class="sf-kickoff"><b>⏰ Kick-off:</b> Sun 19 Jul · 20:00 UK · MetLife Stadium, NJ</div>`:""}
+        ${m.winner?`<div class="${isFin?"sf-winner-row":"rc-winner"}">🏆 ${m.winner}${ow&&ow.name?" — 👤 "+ow.name:""}</div>`:""}
+      </div>`;
+    });
+  }
+
+  // ── EARLIER KNOCKOUT ROUNDS (collapsed below) ──
+  const doneRounds=[
+    {id:"QF",label:"Quarter-Finals",color:"#1B5E20"},
+    {id:"R16",label:"Round of 16",color:"#003DA5"},
+    {id:"R32",label:"Round of 32",color:"#AD1457"},
+  ];
+  doneRounds.forEach(round=>{
+    const ms=state.bracket.filter(m=>m.round===round.id&&m.played);
+    if(!ms.length)return;
+    h+=`<div class="round-section" style="margin-top:8px">
+      <div class="round-hdr" style="background:${round.color};color:white">${round.label} — Results</div>`;
+    ms.forEach(m=>{
+      const o1=state.entries.find(e=>e.team===m.t1), o2=state.entries.find(e=>e.team===m.t2), ow=state.entries.find(e=>e.team===m.winner);
+      const s1w=m.winner===m.t1, s2w=m.winner===m.t2;
+      h+=`<div class="result-card">
+        <div class="rc-teams">
+          <div class="rc-team">
+            <div class="rc-name" style="font-weight:${s1w?700:400}">${m.t1}</div>
+            ${o1&&o1.name?`<div class="rc-owner">👤 ${o1.name}</div>`:""}
+          </div>
+          <div class="rc-score">
+            <div class="rc-sbox ${s1w?"win":"played"}">${m.score1||0}</div>
+            <div class="rc-dash">—</div>
+            <div class="rc-sbox ${s2w?"win":"played"}">${m.score2||0}</div>
+          </div>
+          <div class="rc-team r">
+            <div class="rc-name" style="font-weight:${s2w?700:400}">${m.t2}</div>
+            ${o2&&o2.name?`<div class="rc-owner">👤 ${o2.name}</div>`:""}
+          </div>
+        </div>
+        ${m.winner?`<div class="rc-winner">🏆 ${m.winner}${ow&&ow.name?" — 👤 "+ow.name:""}</div>`:""}
       </div>`;
     });
     h+=`</div>`;
   });
+
   document.getElementById("rlist").innerHTML=h;
 }
+
 
 function rbracket(){
   document.getElementById("bhint").textContent=isAdmin?"Organiser mode — set teams & winners":"Knockout bracket · owners shown automatically";
